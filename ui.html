@@ -37,8 +37,7 @@
       transition: all 0.2s;
     }
     
-    .drop-zone:hover,
-    .drop-zone.dragover {
+    .drop-zone:hover {
       border-color: #18a0fb;
       background: #f0f9ff;
     }
@@ -173,8 +172,7 @@
     <div class="drop-zone" id="dropZone">
       <input type="file" id="folderInput" webkitdirectory directory multiple>
       <p class="drop-zone-text">
-        <strong>Click to select folder</strong><br>
-        or drag and drop here
+        <strong>Click to select folder</strong>
       </p>
     </div>
     <div style="margin-top: 8px; text-align: center;">
@@ -213,6 +211,14 @@
     </div>
   </div>
 
+  <div style="text-align: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e5e5;">
+    <a href="https://github.com/iori73/figma-screenshot-importer#usage-guide" 
+       target="_blank" 
+       style="color: #18a0fb; font-size: 11px; text-decoration: none;">
+      View Usage Guide (AI workflows, tips & more)
+    </a>
+  </div>
+
   <script>
     // Constants
     const IMAGE_WIDTH = () => parseInt(document.getElementById('imageWidth').value) || 360;
@@ -239,23 +245,6 @@
       e.stopPropagation();
       folderInput.click();
     });
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('dragover');
-    });
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      // Handle dropped items (files or folders)
-      if (e.dataTransfer.items) {
-        handleDataTransferItems(e.dataTransfer.items);
-      } else {
-        handleFiles(e.dataTransfer.files);
-      }
-    });
     
     folderInput.addEventListener('change', (e) => {
       console.log('Folder input changed, files:', e.target.files.length);
@@ -273,114 +262,6 @@
     });
     
     importBtn.addEventListener('click', startImport);
-    
-    // Handle dropped items with directory support
-    async function handleDataTransferItems(items) {
-      const files = [];
-      const promises = [];
-      
-      console.log('Processing dropped items:', items.length);
-      
-      for (const item of items) {
-        console.log('Item kind:', item.kind, 'type:', item.type);
-        if (item.kind === 'file') {
-          const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
-          console.log('Entry:', entry ? `${entry.name} (isDirectory: ${entry.isDirectory})` : 'null');
-          if (entry) {
-            promises.push(
-              traverseEntry(entry, '', files)
-                .catch(err => {
-                  console.error('Error traversing entry:', err);
-                })
-            );
-          } else {
-            const file = item.getAsFile();
-            if (file) {
-              console.log('Got file directly:', file.name);
-              files.push(file);
-            }
-          }
-        }
-      }
-      
-      try {
-        await Promise.all(promises);
-      } catch (err) {
-        console.error('Error processing dropped items:', err);
-      }
-      
-      console.log('Drag & drop files found:', files.length);
-      if (files.length > 0) {
-        console.log('Sample files:', files.slice(0, 5).map(f => f.webkitRelativePath || f.name));
-      }
-      
-      if (files.length > 0) {
-        handleFilesArray(files);
-      } else {
-        alert('No files found in dropped items. Please try using the "Click to select folder" button instead.');
-      }
-    }
-    
-    // Read all entries from a directory reader (handles batched responses)
-    function readAllDirectoryEntries(reader) {
-      return new Promise((resolve, reject) => {
-        const allEntries = [];
-        const readBatch = () => {
-          reader.readEntries(
-            (entries) => {
-              if (entries.length === 0) {
-                resolve(allEntries);
-              } else {
-                allEntries.push(...entries);
-                readBatch(); // Continue reading until empty
-              }
-            },
-            (error) => {
-              console.error('Error reading directory entries:', error);
-              reject(error);
-            }
-          );
-        };
-        readBatch();
-      });
-    }
-    
-    // Recursively traverse directory entries
-    function traverseEntry(entry, path, files) {
-      return new Promise((resolve, reject) => {
-        if (entry.isFile) {
-          entry.file(
-            (file) => {
-              // Add webkitRelativePath manually
-              Object.defineProperty(file, 'webkitRelativePath', {
-                value: path + file.name,
-                writable: false
-              });
-              files.push(file);
-              resolve();
-            },
-            (error) => {
-              console.error('Error reading file:', error);
-              reject(error);
-            }
-          );
-        } else if (entry.isDirectory) {
-          const reader = entry.createReader();
-          readAllDirectoryEntries(reader)
-            .then(async (entries) => {
-              console.log(`Directory "${entry.name}" contains ${entries.length} entries`);
-              const subPromises = entries.map(e => 
-                traverseEntry(e, path + entry.name + '/', files)
-              );
-              await Promise.all(subPromises);
-              resolve();
-            })
-            .catch(reject);
-        } else {
-          resolve();
-        }
-      });
-    }
     
     // Handle individual files (without folder structure)
     function handleIndividualFiles(files) {
@@ -401,33 +282,6 @@
           _files: imageFiles.map(f => ({ name: f.name, file: f }))
         }
       };
-      
-      renderPreview();
-      previewSection.style.display = 'block';
-      importBtn.disabled = false;
-    }
-    
-    // Handle files from array (for drag & drop)
-    function handleFilesArray(files) {
-      selectedFiles = files.filter(f => {
-        const name = f.name.toLowerCase();
-        return !name.startsWith('.') &&
-          (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
-      });
-      
-      console.log('Image files found:', selectedFiles.length);
-      
-      if (selectedFiles.length === 0) {
-        alert('No image files found');
-        return;
-      }
-      
-      folderStructure = buildFolderStructure(selectedFiles);
-      
-      if (Object.keys(folderStructure).length === 0) {
-        alert('Could not parse folder structure');
-        return;
-      }
       
       renderPreview();
       previewSection.style.display = 'block';
