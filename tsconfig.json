@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020"],
+    "strict": true,
+    "noEmit": false,
+    "outDir": ".",
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@figma"]
+  },
+  "include": ["code.ts"],
+  "exclude": ["node_modules"]
+}

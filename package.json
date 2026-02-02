@@ -1,0 +1,13 @@
+{
+  "name": "screenshot-importer",
+  "version": "1.0.0",
+  "description": "Import screenshots from local folder to Figma with automatic splitting and organization",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.100.2",
+    "typescript": "^5.3.3"
+  }
+}

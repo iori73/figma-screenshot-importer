@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Screenshot Importer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 12px;
+      color: #333;
+      padding: 16px;
+      background: #fff;
+    }
+    
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .section {
+      margin-bottom: 16px;
+    }
+    
+    .drop-zone {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: #18a0fb;
+      background: #f0f9ff;
+    }
+    
+    .drop-zone input {
+      display: none;
+    }
+    
+    .drop-zone-text {
+      color: #666;
+    }
+    
+    .drop-zone-text strong {
+      color: #18a0fb;
+    }
+    
+    .preview {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      padding: 8px;
+      background: #fafafa;
+      font-family: monospace;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    
+    .preview-item {
+      padding: 2px 0;
+    }
+    
+    .preview-section {
+      color: #9333ea;
+      font-weight: bold;
+    }
+    
+    .preview-folder {
+      color: #2563eb;
+      padding-left: 12px;
+    }
+    
+    .preview-file {
+      color: #333;
+      padding-left: 24px;
+    }
+    
+    .stats {
+      margin-top: 8px;
+      padding: 8px;
+      background: #f0f9ff;
+      border-radius: 4px;
+      color: #0369a1;
+    }
+    
+    .progress {
+      margin-top: 8px;
+      display: none;
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: #e5e5e5;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: #18a0fb;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    
+    .progress-text {
+      margin-top: 4px;
+      color: #666;
+      font-size: 11px;
+    }
+    
+    button {
+      width: 100%;
+      padding: 10px 16px;
+      background: #18a0fb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    button:hover:not(:disabled) {
+      background: #0d8de5;
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .setting-item label {
+      font-size: 11px;
+      color: #666;
+    }
+    
+    .setting-item input {
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h2>1. Select Screenshot Folder</h2>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="folderInput" webkitdirectory directory multiple>
+      <p class="drop-zone-text">
+        <strong>Click to select folder</strong><br>
+        or drag and drop here
+      </p>
+    </div>
+    <div style="margin-top: 8px; text-align: center;">
+      <span style="color: #666; font-size: 11px;">Or select individual image files:</span>
+      <input type="file" id="fileInput" multiple accept="image/png,image/jpeg" style="margin-top: 4px;">
+    </div>
+  </div>
+  
+  <div class="section" id="previewSection" style="display: none;">
+    <h2>2. Preview Structure</h2>
+    <div class="preview" id="preview"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  
+  <div class="section">
+    <h2>3. Settings</h2>
+    <div class="settings">
+      <div class="setting-item">
+        <label>Image Width (px)</label>
+        <input type="number" id="imageWidth" value="360" min="100" max="1920">
+      </div>
+      <div class="setting-item">
+        <label>Max Chunk Height (px)</label>
+        <input type="number" id="maxChunkHeight" value="4096" min="1000" max="8192">
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <button id="importBtn" disabled>Import to Figma</button>
+    <div class="progress" id="progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-text" id="progressText">Processing...</div>
+    </div>
+  </div>
+
+  <script>
+    // Constants
+    const IMAGE_WIDTH = () => parseInt(document.getElementById('imageWidth').value) || 360;
+    const MAX_CHUNK_HEIGHT = () => parseInt(document.getElementById('maxChunkHeight').value) || 4096;
+    
+    // State
+    let selectedFiles = [];
+    let folderStructure = {};
+    
+    // DOM Elements
+    const dropZone = document.getElementById('dropZone');
+    const folderInput = document.getElementById('folderInput');
+    const fileInput = document.getElementById('fileInput');
+    const previewSection = document.getElementById('previewSection');
+    const preview = document.getElementById('preview');
+    const stats = document.getElementById('stats');
+    const importBtn = document.getElementById('importBtn');
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    
+    // Event Listeners
+    dropZone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      folderInput.click();
+    });
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      // Handle dropped items (files or folders)
+      if (e.dataTransfer.items) {
+        handleDataTransferItems(e.dataTransfer.items);
+      } else {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+    
+    folderInput.addEventListener('change', (e) => {
+      console.log('Folder input changed, files:', e.target.files.length);
+      // Log all files for debugging
+      for (let i = 0; i < Math.min(e.target.files.length, 5); i++) {
+        console.log('File', i, ':', e.target.files[i].name, e.target.files[i].webkitRelativePath);
+      }
+      handleFiles(e.target.files);
+    });
+    
+    // Individual file input
+    fileInput.addEventListener('change', (e) => {
+      console.log('File input changed, files:', e.target.files.length);
+      handleIndividualFiles(e.target.files);
+    });
+    
+    importBtn.addEventListener('click', startImport);
+    
+    // Handle dropped items with directory support
+    async function handleDataTransferItems(items) {
+      const files = [];
+      const promises = [];
+      
+      console.log('Processing dropped items:', items.length);
+      
+      for (const item of items) {
+        console.log('Item kind:', item.kind, 'type:', item.type);
+        if (item.kind === 'file') {
+          const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+          console.log('Entry:', entry ? `${entry.name} (isDirectory: ${entry.isDirectory})` : 'null');
+          if (entry) {
+            promises.push(
+              traverseEntry(entry, '', files)
+                .catch(err => {
+                  console.error('Error traversing entry:', err);
+                })
+            );
+          } else {
+            const file = item.getAsFile();
+            if (file) {
+              console.log('Got file directly:', file.name);
+              files.push(file);
+            }
+          }
+        }
+      }
+      
+      try {
+        await Promise.all(promises);
+      } catch (err) {
+        console.error('Error processing dropped items:', err);
+      }
+      
+      console.log('Drag & drop files found:', files.length);
+      if (files.length > 0) {
+        console.log('Sample files:', files.slice(0, 5).map(f => f.webkitRelativePath || f.name));
+      }
+      
+      if (files.length > 0) {
+        handleFilesArray(files);
+      } else {
+        alert('No files found in dropped items. Please try using the "Click to select folder" button instead.');
+      }
+    }
+    
+    // Read all entries from a directory reader (handles batched responses)
+    function readAllDirectoryEntries(reader) {
+      return new Promise((resolve, reject) => {
+        const allEntries = [];
+        const readBatch = () => {
+          reader.readEntries(
+            (entries) => {
+              if (entries.length === 0) {
+                resolve(allEntries);
+              } else {
+                allEntries.push(...entries);
+                readBatch(); // Continue reading until empty
+              }
+            },
+            (error) => {
+              console.error('Error reading directory entries:', error);
+              reject(error);
+            }
+          );
+        };
+        readBatch();
+      });
+    }
+    
+    // Recursively traverse directory entries
+    function traverseEntry(entry, path, files) {
+      return new Promise((resolve, reject) => {
+        if (entry.isFile) {
+          entry.file(
+            (file) => {
+              // Add webkitRelativePath manually
+              Object.defineProperty(file, 'webkitRelativePath', {
+                value: path + file.name,
+                writable: false
+              });
+              files.push(file);
+              resolve();
+            },
+            (error) => {
+              console.error('Error reading file:', error);
+              reject(error);
+            }
+          );
+        } else if (entry.isDirectory) {
+          const reader = entry.createReader();
+          readAllDirectoryEntries(reader)
+            .then(async (entries) => {
+              console.log(`Directory "${entry.name}" contains ${entries.length} entries`);
+              const subPromises = entries.map(e => 
+                traverseEntry(e, path + entry.name + '/', files)
+              );
+              await Promise.all(subPromises);
+              resolve();
+            })
+            .catch(reject);
+        } else {
+          resolve();
+        }
+      });
+    }
+    
+    // Handle individual files (without folder structure)
+    function handleIndividualFiles(files) {
+      const imageFiles = Array.from(files).filter(f => {
+        const name = f.name.toLowerCase();
+        return !name.startsWith('.') &&
+          (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
+      });
+      
+      if (imageFiles.length === 0) {
+        alert('No image files selected');
+        return;
+      }
+      
+      // Create a simple structure with all files in one section
+      folderStructure = {
+        'imported-images': {
+          _files: imageFiles.map(f => ({ name: f.name, file: f }))
+        }
+      };
+      
+      renderPreview();
+      previewSection.style.display = 'block';
+      importBtn.disabled = false;
+    }
+    
+    // Handle files from array (for drag & drop)
+    function handleFilesArray(files) {
+      selectedFiles = files.filter(f => {
+        const name = f.name.toLowerCase();
+        return !name.startsWith('.') &&
+          (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
+      });
+      
+      console.log('Image files found:', selectedFiles.length);
+      
+      if (selectedFiles.length === 0) {
+        alert('No image files found');
+        return;
+      }
+      
+      folderStructure = buildFolderStructure(selectedFiles);
+      
+      if (Object.keys(folderStructure).length === 0) {
+        alert('Could not parse folder structure');
+        return;
+      }
+      
+      renderPreview();
+      previewSection.style.display = 'block';
+      importBtn.disabled = false;
+    }
+    
+    // Handle selected files
+    function handleFiles(files) {
+      // Filter to only image files (by extension, not MIME type for reliability)
+      selectedFiles = Array.from(files).filter(f => {
+        const name = f.name.toLowerCase();
+        return !name.startsWith('.') &&
+          (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
+      });
+      
+      console.log('Total files:', files.length);
+      console.log('Image files found:', selectedFiles.length);
+      if (selectedFiles.length > 0) {
+        console.log('Sample path:', selectedFiles[0].webkitRelativePath);
+      }
+      
+      if (selectedFiles.length === 0) {
+        alert('No image files found in selected folder');
+        return;
+      }
+      
+      // Build folder structure
+      folderStructure = buildFolderStructure(selectedFiles);
+      
+      // Check if structure is empty
+      if (Object.keys(folderStructure).length === 0) {
+        alert('Could not parse folder structure. Please select the parent folder containing section folders.');
+        return;
+      }
+      
+      // Show preview
+      renderPreview();
+      previewSection.style.display = 'block';
+      importBtn.disabled = false;
+    }
+    
+    // Build folder structure from files
+    function buildFolderStructure(files) {
+      const structure = {};
+      
+      files.forEach(file => {
+        const pathParts = file.webkitRelativePath.split('/');
+        console.log('Processing path:', pathParts);
+        
+        // pathParts[0] is the selected folder name (root folder)
+        // pathParts[1...n-1] are subfolders
+        // pathParts[n] is the filename
+        
+        const fileName = pathParts[pathParts.length - 1];
+        
+        // Determine structure based on path depth
+        let sectionName, subfolders;
+        
+        if (pathParts.length >= 3) {
+          // Use first subfolder as section name
+          sectionName = pathParts[1];
+          subfolders = pathParts.slice(2, -1);
+        } else if (pathParts.length === 2) {
+          // File directly in selected folder
+          sectionName = pathParts[0];
+          subfolders = [];
+        } else {
+          return; // Skip invalid paths
+        }
+        
+        if (!structure[sectionName]) {
+          structure[sectionName] = {};
+        }
+        
+        let current = structure[sectionName];
+        
+        if (subfolders.length === 0) {
+          // File directly in section
+          if (!current._files) {
+            current._files = [];
+          }
+          current._files.push({ name: fileName, file: file });
+        } else {
+          // File in subfolder
+          subfolders.forEach((folder, idx) => {
+            if (!current[folder]) {
+              current[folder] = {};
+            }
+            current = current[folder];
+          });
+          
+          if (!current._files) {
+            current._files = [];
+          }
+          current._files.push({ name: fileName, file: file });
+        }
+      });
+      
+      return structure;
+    }
+    
+    // Render preview
+    function renderPreview() {
+      let html = '';
+      let totalFiles = 0;
+      let totalSections = 0;
+      let totalFolders = 0;
+      
+      function renderFolder(obj, indent = 0, isSection = false) {
+        let result = '';
+        for (const [key, value] of Object.entries(obj)) {
+          if (key === '_files') {
+            value.forEach(f => {
+              result += `<div class="preview-item preview-file" style="padding-left: ${indent + 12}px">📄 ${f.name}</div>`;
+              totalFiles++;
+            });
+          } else {
+            if (isSection) {
+              result += `<div class="preview-item preview-section">📁 [Section] ${key}</div>`;
+              totalSections++;
+            } else {
+              result += `<div class="preview-item preview-folder" style="padding-left: ${indent}px">📂 [AutoLayout] ${key}</div>`;
+              totalFolders++;
+            }
+            result += renderFolder(value, indent + 12, false);
+          }
+        }
+        return result;
+      }
+      
+      html = renderFolder(folderStructure, 0, true);
+      preview.innerHTML = html;
+      stats.innerHTML = `<strong>${totalSections}</strong> sections, <strong>${totalFolders}</strong> auto layouts, <strong>${totalFiles}</strong> images`;
+    }
+    
+    // Start import process
+    async function startImport() {
+      importBtn.disabled = true;
+      progress.style.display = 'block';
+      
+      const processedData = {
+        structure: {},
+        settings: {
+          imageWidth: IMAGE_WIDTH(),
+          maxChunkHeight: MAX_CHUNK_HEIGHT()
+        }
+      };
+      
+      // Count total files for progress
+      let totalFiles = 0;
+      let processedFiles = 0;
+      
+      function countFiles(obj) {
+        for (const [key, value] of Object.entries(obj)) {
+          if (key === '_files') {
+            totalFiles += value.length;
+          } else {
+            countFiles(value);
+          }
+        }
+      }
+      countFiles(folderStructure);
+      
+      // Process each section
+      async function processFolder(source, target, path = '') {
+        for (const [key, value] of Object.entries(source)) {
+          if (key === '_files') {
+            target._files = [];
+            for (const fileInfo of value) {
+              progressText.textContent = `Processing: ${fileInfo.name}`;
+              const result = await processImage(fileInfo.file);
+              target._files.push({
+                name: fileInfo.name,
+                chunks: result.chunks,
+                displayWidth: result.displayWidth,
+                displayHeight: result.displayHeight
+              });
+              processedFiles++;
+              progressFill.style.width = `${(processedFiles / totalFiles) * 100}%`;
+            }
+          } else {
+            target[key] = {};
+            await processFolder(value, target[key], path + '/' + key);
+          }
+        }
+      }
+      
+      await processFolder(folderStructure, processedData.structure);
+      
+      progressText.textContent = 'Sending to Figma...';
+      
+      // Send to Figma
+      parent.postMessage({
+        pluginMessage: {
+          type: 'import',
+          data: processedData
+        }
+      }, '*');
+    }
+    
+    // Process single image: split at high resolution, display at target size
+    // Following "big insert image" approach: keep original resolution, split into chunks
+    async function processImage(file) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const displayWidth = IMAGE_WIDTH(); // Display width in Figma (e.g., 360px)
+          const maxChunkSize = MAX_CHUNK_HEIGHT(); // Max chunk dimension (e.g., 4096px)
+          
+          const originalWidth = img.width;
+          const originalHeight = img.height;
+          
+          // Calculate display dimensions (maintaining aspect ratio)
+          const displayScale = displayWidth / originalWidth;
+          const displayHeight = Math.round(originalHeight * displayScale);
+          
+          console.log(`Processing image: ${originalWidth}x${originalHeight} -> display ${displayWidth}x${displayHeight}`);
+          
+          // Split original image into chunks (keep high resolution)
+          const chunks = [];
+          const numChunks = Math.ceil(originalHeight / maxChunkSize);
+          
+          for (let i = 0; i < numChunks; i++) {
+            const chunkCanvas = document.createElement('canvas');
+            const chunkCtx = chunkCanvas.getContext('2d');
+            
+            const startY = i * maxChunkSize;
+            const chunkHeight = Math.min(maxChunkSize, originalHeight - startY);
+            
+            // Keep original width, chunk by height
+            chunkCanvas.width = originalWidth;
+            chunkCanvas.height = chunkHeight;
+            
+            // Draw chunk from original image at full resolution
+            chunkCtx.drawImage(
+              img,
+              0, startY, originalWidth, chunkHeight,  // Source rectangle
+              0, 0, originalWidth, chunkHeight         // Destination (same size = no scaling)
+            );
+            
+            // Convert to PNG (lossless)
+            const dataUrl = chunkCanvas.toDataURL('image/png');
+            
+            // Calculate display size for this chunk
+            const chunkDisplayHeight = Math.round(chunkHeight * displayScale);
+            
+            chunks.push({
+              // Original (high-res) dimensions - used for image data
+              originalWidth: originalWidth,
+              originalHeight: chunkHeight,
+              // Display dimensions - used for Figma node size
+              displayWidth: displayWidth,
+              displayHeight: chunkDisplayHeight,
+              // Image data
+              data: dataUrl
+            });
+            
+            console.log(`  Chunk ${i + 1}/${numChunks}: ${originalWidth}x${chunkHeight} -> display ${displayWidth}x${chunkDisplayHeight}`);
+          }
+          
+          resolve({
+            chunks: chunks,
+            displayWidth: displayWidth,
+            displayHeight: displayHeight
+          });
+        };
+        
+        img.src = URL.createObjectURL(file);
+      });
+    }
+    
+    // Listen for messages from Figma
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+      
+      if (msg.type === 'progress') {
+        progressText.textContent = msg.text;
+        if (msg.percent !== undefined) {
+          progressFill.style.width = `${msg.percent}%`;
+        }
+      } else if (msg.type === 'complete') {
+        progressText.textContent = 'Import complete!';
+        progressFill.style.width = '100%';
+        setTimeout(() => {
+          progress.style.display = 'none';
+          importBtn.disabled = false;
+        }, 2000);
+      } else if (msg.type === 'error') {
+        progressText.textContent = `Error: ${msg.text}`;
+        importBtn.disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>
