@@ -1,4 +1,4 @@
-# Screenshot Importer
+# Bulk Screenshot Importer
 
 Import local screenshot folders into Figma while preserving your folder hierarchy.
 
@@ -86,7 +86,7 @@ MIT
 
 ---
 
-# Screenshot Importer (日本語)
+# Bulk Screenshot Importer (日本語)
 
 ローカルのスクリーンショットフォルダをFigmaにインポートするプラグイン。
 

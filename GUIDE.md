@@ -1,4 +1,4 @@
-# Screenshot Importer - Usage Guide
+# Bulk Screenshot Importer - Usage Guide
 
 This guide covers different workflows for collecting and organizing screenshots before importing them into Figma.
 
@@ -312,7 +312,7 @@ screenshots/
 
 ---
 
-# Screenshot Importer - 使用ガイド（日本語）
+# Bulk Screenshot Importer - 使用ガイド（日本語）
 
 このガイドでは、Figmaにインポートする前のスクリーンショット収集と整理のワークフローを説明します。
 

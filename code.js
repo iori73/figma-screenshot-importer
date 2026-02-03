@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Screenshot Importer Plugin
+ * Bulk Screenshot Importer Plugin
  *
  * Imports screenshots from local folder to Figma with:
  * - Automatic image splitting for high resolution
@@ -240,7 +240,7 @@ async function importScreenshots(data) {
 figma.showUI(__html__, {
     width: 400,
     height: 600,
-    title: 'Screenshot Importer'
+    title: 'Bulk Screenshot Importer'
 });
 // Handle messages from UI
 figma.ui.onmessage = async (msg) => {
