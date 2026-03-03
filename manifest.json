@@ -1,12 +1,12 @@
 {
   "name": "Bulk Screenshot Importer",
-  "id": "1600513697106504895",
+  "id": "1609935194251849962",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",
   "editorType": ["figma"],
   "documentAccess": "dynamic-page",
   "networkAccess": {
-    "allowedDomains": ["none"]
+    "allowedDomains": ["https://generativelanguage.googleapis.com"]
   }
 }

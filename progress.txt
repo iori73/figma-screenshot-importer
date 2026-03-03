@@ -1,0 +1,93 @@
+# Bulk Screenshot Importer - Progress
+
+## v2.1.0 (2026-02-27) - AI Section Naming & UX Improvements
+
+### 完了
+- [x] Gemini AI セクション名提案機能
+  - Gemini 2.0 Flash API 統合（BYOK パターン、無料枠で運用可能）
+  - 各セクションの代表サムネイルを1回のAPI呼び出しで送信
+  - APIキーは localStorage に保存、Settings UI で入力
+  - エラー時はファイル名ベースのサジェストにフォールバック
+  - manifest.json に generativelanguage.googleapis.com を許可追加
+- [x] ファイル名ベースのセクション名サジェスト
+  - 20カテゴリのキーワード辞書（Home, Login, Search, Profile 等）
+  - ファイル名に共通する単語を抽出するフォールバック
+  - 重複名の回避ロジック
+- [x] セクション名ゴーストテキストUI
+  - placeholder にサジェスト名を表示（イタリック薄字）
+  - Tab/Enter でサジェスト受入
+  - 「Tab ↵」ヒントバッジ表示
+  - エクスポート時は name || suggestedName || Section N のフォールバック
+- [x] スクロール検出の改善
+  - stripHasEnoughDetail: ストリップのピクセル分散チェック
+  - 単色ストリップ（ダーク系UI等）でのスクロール誤検出を防止
+- [x] UI/UX 改善
+  - 各タブに説明文追加（Folder Import / Smart Import の違いを明示）
+  - 言語切替をセグメントコントロール（EN/JA）に変更
+  - APIキー入力欄追加（目のSVGアイコン、表示切替）
+  - ヒントテキスト更新（AIキーの役割と無しの場合の説明）
+  - Image Width デフォルト値を 390px に変更
+- [x] 本番公開準備 v2
+  - manifest.json の networkAccess 修正（Gemini API許可）
+  - code.js の minify 有効化（約8KB → 約4.5KB）
+  - プロジェクトドキュメント更新（CLAUDE.md, progress.txt, lessons.md）
+
+## v2.0.0 (2026-02-27) - Smart Import & Production Readiness
+
+### 完了
+- [x] Smart Import モード追加（スマホスクショの自動整理）
+  - スクロール検出（ピクセル比較ベース）
+  - セクション分け（ナビバー + 色分布比較）
+  - プレビュー UI（セクション名編集、スクロールグループ表示）
+  - 感度スライダー（Scroll / Section）
+  - Re-analyze 機能
+- [x] 本番公開準備（Production Readiness Checklist）
+  - [x] C1: img.onerror ハンドラ追加（processImage, loadImageData）
+  - [x] C2: Figma API エラーハンドリング（createImageNode try-catch、null安全）
+  - [x] C3: XSS エスケープ（escapeHtml関数、全innerHTML箇所に適用）
+  - [x] H1: メモリリーク修正（URL.revokeObjectURL を processImage に追加）
+  - [x] H2: UIフリーズ対策（解析ループに yield ポイント、200枚警告）
+  - [x] H3: キャンセル機能（解析・インポートの両方にキャンセルボタン）
+  - [x] H4: Smart Import UX改善（説明テキスト、スライダーヒント、スキップ通知）
+  - [x] H5: README / GUIDE 更新（Smart Import セクション追加）
+  - [x] M1: エッジケース対応（非画像ファイルスキップ通知、エラー画像スキップ）
+  - [x] M2: プログレス改善（解析フェーズの実進捗表示）
+  - [x] M3: Figma Community 公開用アセット（FIGMA_COMMUNITY.md、説明文）
+  - [x] M4: バージョン 2.0.0 へ更新
+  - [x] M5: プロジェクトドキュメント作成（CLAUDE.md, progress.txt, lessons.md）
+
+### LOW 項目（完了）
+- [x] L1: キーボードアクセシビリティ
+  - role="tablist"/"tab"/"tabpanel" 追加
+  - aria-selected, aria-controls, aria-labelledby 追加
+  - Arrow/Home/End キーによるタブ切り替え
+  - focus-visible スタイル追加
+  - role="progressbar" + aria-valuenow 追加
+  - alt 属性をサムネイル画像に追加
+  - Drop zone にキーボード操作（Enter/Space）対応
+- [x] L2: i18n（日本語UI対応）
+  - EN/JA 完全翻訳（50+ テキストキー）
+  - data-i18n 属性による自動テキスト更新
+  - セグメントコントロール式言語切替（EN/JA）
+  - localStorage で言語設定を永続化
+  - 動的テキスト（プログレス等）もt()関数で翻訳
+- [x] L3: ダークモード対応
+  - CSS カスタムプロパティ化（30+ 変数）
+  - @media (prefers-color-scheme: dark) 完全対応
+  - 全UI要素がダークテーマに対応
+- [x] L4: コード分割（esbuild導入）
+  - src/ui/styles.css, src/ui/main.ts, src/ui/index.html に分割
+  - src/code.ts（Figmaサンドボックスコード）
+  - build.mjs でesbuildバンドル → ui.html + code.js を生成
+  - 本番ビルドは minify 有効（UI + code 両方）
+  - レガシービルド（tsc）も互換用に維持
+
+## v1.0.0 (Initial) - Folder Import
+
+### 完了
+- [x] フォルダ構造 → Figma Section/AutoLayout 変換
+- [x] 高解像度画像の自動チャンク分割
+- [x] 画像幅の統一設定
+- [x] フォルダプレビュー UI
+- [x] 個別ファイル選択モード
+- [x] README / GUIDE 作成

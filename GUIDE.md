@@ -4,11 +4,57 @@ This guide covers different workflows for collecting and organizing screenshots 
 
 ## Table of Contents
 
-- [Recommended Folder Structure](#recommended-folder-structure)
+- [Smart Import: Smartphone App Screenshots](#smart-import-smartphone-app-screenshots)
+- [Recommended Folder Structure (Folder Import)](#recommended-folder-structure)
 - [Workflow A: AI-Assisted (Cursor, Claude, etc.)](#workflow-a-ai-assisted-cursor-claude-etc)
 - [Workflow B: Technical Users (CLI Tools & Automation)](#workflow-b-technical-users-cli-tools--automation)
 - [Workflow C: Non-Technical Users (Manual)](#workflow-c-non-technical-users-manual)
 - [Tips & Best Practices](#tips--best-practices)
+
+---
+
+## Smart Import: Smartphone App Screenshots
+
+**Best for:** Organizing smartphone app screenshots by screen section (tabs) with automatic scroll detection. No folder pre-organization required.
+
+### How It Works
+
+Smart Import analyzes your screenshots using pixel comparison to:
+
+1. **Detect scroll sequences**: When two consecutive screenshots show the same scrollable screen (e.g., a long feed), they are grouped and stacked vertically with 0px gap
+2. **Detect section breaks**: When the bottom navigation bar or overall visual layout changes significantly, a new section is created
+
+### Taking Screenshots for Best Results
+
+For the best automatic detection:
+
+- **Use consistent naming**: Name files sequentially (e.g., `001.png`, `002.png`, or let your phone's default naming handle it)
+- **Capture systematically**: Go through the app tab by tab, top to bottom
+- **For scrollable screens**: Take overlapping screenshots — scroll about 70-80% of the screen between captures
+- **Keep the status bar visible**: The algorithm excludes status/nav bar areas from scroll comparison
+- **Avoid notification overlays**: Clear notifications before capturing
+
+### Workflow
+
+1. Open the plugin and switch to the **Smart Import** tab
+2. Select all your screenshots (drag-and-drop or file picker)
+3. Wait for automatic analysis
+4. Review the preview:
+   - **Blue-bordered groups** with "scroll" label = detected scroll sequences
+   - Edit section names by clicking on them
+5. Fine-tune with sensitivity sliders:
+   - **Scroll Sensitivity** (default 0.85): Raise to be stricter (fewer scroll matches), lower to be more lenient
+   - **Section Sensitivity** (default 0.70): Raise to split into more sections, lower to merge more
+6. Click "Re-analyze" after adjusting sliders
+7. Click "Import to Figma"
+
+### Tips
+
+- Works best with 10-100 screenshots
+- For 200+ images, analysis may take a moment — a confirmation dialog will appear
+- If scroll detection is too aggressive, raise the Scroll Sensitivity slider to 0.90+
+- If everything ends up in one section, raise the Section Sensitivity slider to 0.80+
+- You can always cancel the analysis or import in progress
 
 ---
 
@@ -318,10 +364,48 @@ screenshots/
 
 ## 目次
 
-- [推奨フォルダ構造](#推奨フォルダ構造)
+- [Smart Import: スマホアプリのスクショ整理](#smart-import-スマホアプリのスクショ整理)
+- [推奨フォルダ構造（Folder Import）](#推奨フォルダ構造)
 - [ワークフローA: AI支援（Cursor、Claudeなど）](#ワークフローa-ai支援cursorclaude)
 - [ワークフローB: 技術者向け（CLIツールと自動化）](#ワークフローb-技術者向けcliツールと自動化)
 - [ワークフローC: 非技術者向け（手動）](#ワークフローc-非技術者向け手動)
+
+---
+
+## Smart Import: スマホアプリのスクショ整理
+
+**対象:** スマートフォンアプリのスクリーンショットを、画面セクション（タブ）ごとに自動整理したいユーザー。フォルダの事前整理は不要。
+
+### 仕組み
+
+Smart Importはピクセル比較によりスクリーンショットを解析し、以下を自動検出します：
+
+1. **スクロール検出**: 連続するスクショが同じスクロール画面の場合、縦に連結（gap=0px）
+2. **セクション検出**: ボトムナビバーや全体のレイアウトが大きく変わった時点で新しいセクションを作成
+
+### スクショ撮影のコツ
+
+自動検出の精度を上げるために：
+
+- **連番の名前をつける**: `001.png`, `002.png` のように、またはスマホのデフォルト名でOK
+- **体系的に撮る**: アプリをタブごとに、上から下へ順番に撮影
+- **スクロール画面**: 画面の70-80%ずつスクロールして撮影（重なりが重要）
+- **ステータスバーは残す**: アルゴリズムがステータスバー/ナビバー領域を自動除外
+- **通知を消す**: 撮影前に通知をクリアしておく
+
+### ワークフロー
+
+1. プラグインを開き、**Smart Import** タブに切り替え
+2. スクリーンショットをまとめて選択（ドラッグ＆ドロップまたはファイル選択）
+3. 自動解析を待つ
+4. プレビューを確認：
+   - **青い枠のグループ** = スクロール連結として検出されたもの
+   - セクション名はクリックして編集可能
+5. 感度スライダーで微調整：
+   - **Scroll Sensitivity**（デフォルト0.85）: 上げると厳密に（スクロール判定が減る）
+   - **Section Sensitivity**（デフォルト0.70）: 上げるとセクションが増える
+6. スライダー調整後「Re-analyze」をクリック
+7. 「Import to Figma」をクリック
 
 ---
 

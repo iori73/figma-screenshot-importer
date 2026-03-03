@@ -1,13 +1,15 @@
 {
   "name": "screenshot-importer",
-  "version": "1.0.0",
-  "description": "Import screenshots from local folder to Figma with automatic splitting and organization",
+  "version": "2.0.0",
+  "description": "Import screenshots into Figma with folder structure preservation and automatic smart grouping for smartphone app screenshots",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "build": "node build.mjs",
+    "build:legacy": "tsc",
+    "watch": "node build.mjs --watch"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.100.2",
+    "esbuild": "^0.27.3",
     "typescript": "^5.3.3"
   }
 }

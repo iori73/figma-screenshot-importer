@@ -1,3 +1,8 @@
 node_modules/
 .DS_Store
 *.log
+
+# Build outputs (generated from src/)
+# These ARE committed because Figma needs them directly
+# code.js
+# ui.html

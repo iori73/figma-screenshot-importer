@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bulk Screenshot Importer</title>
+  <style>/* __STYLES__ */</style>
+</head>
+<body>
+
+  <!-- ============== Mode Tabs ============== -->
+  <div class="mode-tabs" role="tablist" aria-label="Import mode">
+    <button class="mode-tab" role="tab" id="tabFolder"
+            aria-selected="true" aria-controls="folderMode" tabindex="0"
+            onclick="switchMode('folder')">
+      <span data-i18n="tabFolder">Folder Import</span>
+    </button>
+    <button class="mode-tab" role="tab" id="tabSmart"
+            aria-selected="false" aria-controls="smartMode" tabindex="-1"
+            onclick="switchMode('smart')">
+      <span data-i18n="tabSmart">Smart Import</span>
+    </button>
+  </div>
+
+  <!-- ============== Folder Import Mode ============== -->
+  <div id="folderMode" class="mode-content active" role="tabpanel" aria-labelledby="tabFolder">
+    <div class="mode-desc" data-i18n="folderDesc">Already organized your screenshots into folders? Import the folder structure directly as Figma Sections.</div>
+    <div class="section">
+      <h2 data-i18n="folderStep1">1. Select Screenshot Folder</h2>
+      <div class="drop-zone" id="dropZone" role="button" tabindex="0"
+           aria-label="Select screenshot folder">
+        <input type="file" id="folderInput" webkitdirectory directory multiple
+               aria-label="Folder file picker">
+        <p class="drop-zone-text">
+          <strong data-i18n="clickSelectFolder">Click to select folder</strong>
+        </p>
+      </div>
+      <div style="margin-top: 8px; text-align: center;">
+        <span style="color: var(--text-secondary); font-size: 11px;"
+              data-i18n="orSelectFiles">Or select individual image files:</span>
+        <input type="file" id="fileInput" multiple accept="image/png,image/jpeg"
+               style="margin-top: 4px;" aria-label="Individual file picker">
+      </div>
+    </div>
+
+    <div class="section" id="previewSection" style="display: none;">
+      <h2 data-i18n="folderStep2">2. Preview Structure</h2>
+      <div class="preview" id="preview" aria-live="polite"></div>
+      <div class="stats" id="stats" aria-live="polite"></div>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="folderStep3">3. Settings</h2>
+      <div class="settings">
+        <div class="setting-item">
+          <label for="imageWidth" data-i18n="imageWidth">Image Width (px)</label>
+          <input type="number" id="imageWidth" value="390" min="100" max="1920">
+        </div>
+        <div class="setting-item">
+          <label for="maxChunkHeight" data-i18n="maxChunkHeight">Max Chunk Height (px)</label>
+          <input type="number" id="maxChunkHeight" value="4096" min="1000" max="8192">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="primary-btn" id="importBtn" disabled data-i18n="importBtn">Import to Figma</button>
+      <button class="cancel-btn" id="cancelFolderBtn" style="display:none"
+              onclick="cancelImport('folder')" data-i18n="cancelImport">Cancel Import</button>
+      <div class="progress" id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText" aria-live="polite">Processing...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== Smart Import Mode ============== -->
+  <div id="smartMode" class="mode-content" role="tabpanel" aria-labelledby="tabSmart">
+    <div class="mode-desc" data-i18n="smartDesc">Just have a bunch of screenshots? Drop them all in — scroll sequences and app sections are detected automatically.</div>
+    <div class="section">
+      <h2 data-i18n="smartStep1">1. Select Screenshots</h2>
+      <div class="drop-zone" id="smartDropZone" role="button" tabindex="0"
+           aria-label="Select app screenshots">
+        <input type="file" id="smartFileInput" multiple accept="image/png,image/jpeg"
+               aria-label="Screenshot file picker">
+        <p class="drop-zone-text">
+          <strong data-i18n="clickSelectScreenshots">Click to select app screenshots</strong><br>
+          <span style="font-size: 11px; color: var(--text-tertiary);"
+                data-i18n="smartSortHint">Select all screenshots at once &mdash; sorted by filename automatically</span>
+        </p>
+      </div>
+      <div id="smartSkippedNotice" aria-live="polite"></div>
+    </div>
+
+    <div class="section" id="smartAnalysisSection" style="display: none;">
+      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-bar"><div class="progress-fill" id="analysisProgressFill"></div></div>
+        <div class="progress-text" id="analysisProgressText" aria-live="polite">Analyzing screenshots...</div>
+      </div>
+      <button class="cancel-btn" id="cancelAnalysisBtn"
+              onclick="cancelImport('analysis')" data-i18n="cancelAnalysis">Cancel Analysis</button>
+    </div>
+
+    <div class="section" id="smartPreviewSection" style="display: none;">
+      <h2 data-i18n="smartStep2">2. Preview &amp; Edit Sections</h2>
+      <div class="analysis-info" id="analysisInfo" aria-live="polite"></div>
+      <div class="smart-preview" id="smartPreview" aria-live="polite"></div>
+      <div class="stats" id="smartStats" aria-live="polite"></div>
+      <button class="re-analyze-btn" onclick="reAnalyze()" data-i18n="reAnalyze">Re-analyze with current settings</button>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="smartStep3">3. Settings</h2>
+      <div class="settings">
+        <div class="setting-item">
+          <label for="smartImageWidth" data-i18n="imageWidth">Image Width (px)</label>
+          <input type="number" id="smartImageWidth" value="390" min="100" max="1920">
+        </div>
+        <div class="setting-item">
+          <label for="smartMaxChunkHeight" data-i18n="maxChunkHeight">Max Chunk Height (px)</label>
+          <input type="number" id="smartMaxChunkHeight" value="4096" min="1000" max="8192">
+        </div>
+      </div>
+      <div class="settings" style="margin-top: 8px;">
+        <div class="setting-item">
+          <label for="scrollSensitivity" data-i18n="scrollSens">Scroll Sensitivity</label>
+          <input type="range" id="scrollSensitivity" min="0.50" max="0.99" step="0.01" value="0.85"
+                 oninput="document.getElementById('scrollSensLabel').textContent=this.value">
+          <span id="scrollSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.85</span>
+          <span class="setting-hint" data-i18n="scrollSensHint">Higher = stricter scroll matching</span>
+        </div>
+        <div class="setting-item">
+          <label for="sectionSensitivity" data-i18n="sectionSens">Section Sensitivity</label>
+          <input type="range" id="sectionSensitivity" min="0.30" max="0.95" step="0.01" value="0.70"
+                 oninput="document.getElementById('sectionSensLabel').textContent=this.value">
+          <span id="sectionSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.70</span>
+          <span class="setting-hint" data-i18n="sectionSensHint">Higher = more sections detected</span>
+        </div>
+      </div>
+      <div class="settings ai-settings" style="margin-top: 8px;">
+        <div class="setting-item" style="grid-column: 1 / -1;">
+          <label for="geminiApiKey" data-i18n="geminiApiKeyLabel">Gemini API Key <span class="optional-badge" data-i18n="optionalBadge">(optional)</span></label>
+          <div class="api-key-wrapper">
+            <input type="password" id="geminiApiKey" placeholder="AIza..."
+                   onchange="saveGeminiApiKey(this.value)" autocomplete="off">
+            <button class="api-key-toggle" onclick="toggleApiKeyVisibility()" aria-label="Toggle visibility"><svg class="eye-icon" viewBox="0 0 16 16" fill="none"><path d="M8 3C4.36 3 1.26 5.28.5 8c.76 2.72 3.86 5 7.5 5s6.74-2.28 7.5-5c-.76-2.72-3.86-5-7.5-5z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.2"/><line class="eye-slash" x1="2.5" y1="13.5" x2="13.5" y2="2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+          </div>
+          <span class="setting-hint" data-i18n="geminiApiKeyHint">Free — AI suggests section names from screenshots. Without a key, names are inferred from filenames only.</span>
+          <a href="https://aistudio.google.com/apikey" target="_blank" class="setting-link" data-i18n="getApiKey">Get free API key →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="primary-btn" id="smartImportBtn" disabled data-i18n="importBtn">Import to Figma</button>
+      <button class="cancel-btn" id="cancelSmartBtn" style="display:none"
+              onclick="cancelImport('smart')" data-i18n="cancelImport">Cancel Import</button>
+      <div class="progress" id="smartProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-bar"><div class="progress-fill" id="smartProgressFill"></div></div>
+        <div class="progress-text" id="smartProgressText" aria-live="polite">Processing...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== Footer ============== -->
+  <div class="footer">
+    <a href="https://github.com/iori73/figma-screenshot-importer#usage-guide"
+       target="_blank" data-i18n="viewGuide">
+      View Usage Guide
+    </a>
+    <div class="lang-switcher" role="radiogroup" aria-label="Language">
+      <button class="lang-option" id="langEn" data-lang="en" onclick="setLang('en')" role="radio" aria-checked="true">EN</button>
+      <button class="lang-option" id="langJa" data-lang="ja" onclick="setLang('ja')" role="radio" aria-checked="false">JA</button>
+    </div>
+  </div>
+
+  <script>/* __SCRIPT__ */</script>
+</body>
+</html>
