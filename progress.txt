@@ -1,5 +1,67 @@
 # Bulk Screenshot Importer - Progress
 
+## v4.0.0 (2026-03-19) - ミニマル化: AI 機能削除
+
+### 完了
+- [x] Gemini AI 関連コードを全削除（API キー入力 UI、セクション名提案、AI サムネイル生成、リトライ制御）
+- [x] manifest.json の networkAccess を `["none"]` に変更（外部通信不要に）
+- [x] AI 固有の CSS（.api-key-wrapper, .ai-status, .ai-spinner 等）を削除
+- [x] AI 固有の i18n テキスト（geminiApiKeyLabel, aiSuggesting 等）を削除
+- [x] `src/archive/gemini-ai.ts` に全 AI コードを復元手順付きでアーカイブ
+- [x] プラグインのコア機能に集中: フォルダ構造変換 + スクロール検出 + ファイル名サジェスト
+- [x] Figma Community 公開（プラグイン ID: `1617503809683781303`）
+- [x] note 記事（日本語）執筆 → `articles/note/bulk-screenshot-importer-plugin.md`
+- [x] Medium 記事（英語）執筆 → `articles/medium/bulk-screenshot-importer-plugin-EN.md`
+  - 実用ガイド中心の構成に刷新（旧: 技術深掘り + AI/BYOK 中心）
+  - AI 機能削除・単一フロー化を反映、プラグイン ID 更新
+
+### 残存機能
+- フォルダ構造 → Figma セクション/AutoLayout 自動変換
+- スクロール検出 + セクション自動分割（ピクセル比較ベース）
+- ファイル名キーワード辞書（20カテゴリ）によるセクション名サジェスト
+- ドラッグ&ドロップ + フォルダ選択の単一適応フロー
+- 設定アコーディオン、プログレス、キャンセル機能
+- i18n（EN/JA）、ダークモード
+
+## v3.1.0 (2026-03-19) - AI 全画面ラベリング [ARCHIVED → src/archive/gemini-ai.ts]
+
+### 完了（v4.0.0 で削除）
+- [x] Gemini AI を全スクリーンショット対象に拡張（旧: セクション代表1枚 → 新: 全画像）
+- [x] 各画像に個別ラベルを付与し、Figma レイヤー名に反映
+- [x] AI 提案をプレースホルダーでなくデフォルト値として自動適用
+- [x] プレビュー UI でサムネイルの tooltip に AI ラベル表示
+- [x] i18n テキスト更新、section-accept-hint 削除
+
+## v3.0.0 (2026-03-19) - UX 再設計: 単一フローアーキテクチャ
+
+### 完了
+- [x] 2タブ構成（Folder Import / Smart Import）を廃止 → 単一ドロップゾーン + 自動適応フロー
+- [x] 入力に応じた自動モード検出
+  - フォルダ選択（webkitdirectory）でサブフォルダあり → フォルダ構造インポート
+  - フォルダ選択でフラット → 自動解析（旧 Smart Import）
+  - 画像ファイルドロップ / 個別選択 → 自動解析
+- [x] 統一プレビュー UI
+  - フォルダ/自動解析どちらも同じセクションに表示
+  - 全セクション名が編集可能（フォルダモードでも全セクション名を入力で変更可）
+- [x] 設定をアコーディオンで折りたたみ（<details>）
+  - 基本設定: Image Width, Max Chunk Height
+  - 詳細設定（スクロール感度、セクション感度、Gemini API Key）は自動解析モード時のみ表示
+- [x] UI ポリッシュ
+  - ステップ番号（1, 2, 3）を廃止
+  - ドロップゾーンのコンパクト状態（ファイル選択後に視覚的フィードバック）
+  - "or" + "Choose individual files" のクリーンな代替入力パス
+  - 初期画面のスペーシング改善
+
+## v2.2.0 (2026-03-19) - Drag & Drop UX
+
+### 完了
+- [x] Folder Import ドロップゾーンにドラッグ＆ドロップ対応
+  - 画像ファイルの直接ドロップ → 個別ファイルとしてインポート
+  - フォルダドロップ時は明確なガイドメッセージ表示（Figma iframe 制約により非対応）
+  - dragenter カウンター方式で安定したビジュアルフィードバック（子要素上のちらつき防止）
+- [x] Smart Import ドロップゾーンも同じ dragenter カウンター方式に改善
+- [x] webkitGetAsEntry() によるフォルダ/ファイル判別ロジック
+
 ## v2.1.0 (2026-02-27) - AI Section Naming & UX Improvements
 
 ### 完了

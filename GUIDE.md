@@ -13,7 +13,6 @@ This guide covers different workflows for collecting and organizing screenshots 
 
 ---
 
-## Smart Import: Smartphone App Screenshots
 
 **Best for:** Organizing smartphone app screenshots by screen section (tabs) with automatic scroll detection. No folder pre-organization required.
 

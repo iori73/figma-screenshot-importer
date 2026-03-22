@@ -1,451 +1,334 @@
-<svg width="1920" height="960" viewBox="0 0 1920 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="960" viewBox="0 0 1920 960">
   <defs>
-    <linearGradient id="coverBg" x1="0" y1="0" x2="1920" y2="960" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F0F0F0"/>
-      <stop offset="1" stop-color="#E8E8E8"/>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A2E"/>
+      <stop offset="100%" stop-color="#0F0F1A"/>
     </linearGradient>
-    <pattern id="dotGrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="10" r="0.8" fill="#CCC"/>
-    </pattern>
-    <!-- Card shadow filter -->
-    <filter id="cardShadow" x="-4%" y="-4%" width="108%" height="112%">
-      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.08"/>
+
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.3"/>
     </filter>
-    <filter id="sectionShadow" x="-1%" y="-1%" width="102%" height="104%">
-      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.05"/>
+    <filter id="sectionShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
+    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    <filter id="arrowGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#9333EA" flood-opacity="0.35"/>
+    </filter>
+
+    <!--
+      Figma brand colors (muted for harmony):
+      Green  #0ACF83 → header #E2F5ED  accent #5BBF99  tint #F0FAF5
+      Blue   #1ABCFE → header #E0F0F8  accent #6DB5CF  tint #EFF6FB
+      Purple #A259FF → header #EDE4F6  accent #A088D0  tint #F5F0FB
+      Red    #F24E1E → header #F6E2DA  accent #CC8A74  tint #FBF0EC
+      Coral  #FF7262 → header #F8E4E0  accent #D49C94  tint #FBF0EE
+    -->
   </defs>
 
   <!-- Background -->
-  <rect width="1920" height="960" fill="url(#coverBg)"/>
-  <rect width="1920" height="960" fill="url(#dotGrid)"/>
+  <rect width="1920" height="960" fill="url(#bgGradient)"/>
+  <g opacity="0.05">
+    <pattern id="gridDots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#FFFFFF"/>
+    </pattern>
+    <rect width="1920" height="960" fill="url(#gridDots)"/>
+  </g>
 
-  <!-- ============ Title text ============ -->
-  <text x="960" y="90" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="700" fill="#1A1A2E">Bulk Screenshot Importer</text>
-  <text x="960" y="130" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" fill="#666">Organize your screenshots into Figma — instantly</text>
+  <!-- ============ Title ============ -->
+  <g filter="url(#textGlow)">
+    <text x="960" y="115" text-anchor="middle"
+          font-family="Inter, system-ui, -apple-system, sans-serif"
+          font-size="64" font-weight="800" fill="#FFFFFF">Bulk Screenshot Importer</text>
+    <text x="960" y="165" text-anchor="middle"
+          font-family="Inter, system-ui, -apple-system, sans-serif"
+          font-size="26" font-weight="400" fill="#888888">Organize screenshots into Figma sections — instantly</text>
+  </g>
 
-  <!-- ============ Section 1: Home (top-left) ============ -->
+  <!-- ================================================================ -->
+  <!-- LEFT: Scattered Screenshots (Before)                            -->
+  <!-- Cards: 100×216 = iPhone 13 ratio (390:844 = 1:2.164)           -->
+  <!-- ================================================================ -->
+
+  <!-- Card D — far back, faded, green -->
+  <g filter="url(#cardShadow)" transform="translate(185, 530) rotate(14)" opacity="0.45">
+    <rect x="-45" y="-98" width="90" height="195" rx="6" fill="#FFFFFF"/>
+    <rect x="-45" y="-98" width="90" height="18" rx="6" fill="#E2F5ED"/>
+    <rect x="-35" y="-86" width="38" height="4" rx="2" fill="#5BBF99" opacity="0.5"/>
+    <rect x="-35" y="-72" width="70" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-35" y="-62" width="70" height="50" rx="3" fill="#F0FAF5" opacity="0.5"/>
+    <rect x="-45" y="75" width="90" height="22" rx="0" fill="#FAFAFA"/>
+    <circle cx="-22" cy="86" r="3" fill="#D0D0D0"/>
+    <circle cx="-6" cy="86" r="3" fill="#5BBF99"/>
+    <circle cx="10" cy="86" r="3" fill="#D0D0D0"/>
+  </g>
+
+  <!-- Card C — behind, muted, red -->
+  <g filter="url(#cardShadow)" transform="translate(360, 370) rotate(-6)" opacity="0.65">
+    <rect x="-50" y="-108" width="100" height="216" rx="7" fill="#FFFFFF"/>
+    <rect x="-50" y="-108" width="100" height="20" rx="7" fill="#F6E2DA"/>
+    <rect x="-38" y="-94" width="42" height="4" rx="2" fill="#CC8A74" opacity="0.5"/>
+    <rect x="-38" y="-80" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="-70" width="56" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="-58" width="76" height="55" rx="3" fill="#FBF0EC" opacity="0.5"/>
+    <rect x="-38" y="6" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="16" width="50" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-50" y="84" width="100" height="24" rx="0" fill="#FAFAFA"/>
+    <rect x="-50" y="84" width="100" height="0.5" fill="#E0E0E0"/>
+    <circle cx="-26" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="-8" cy="96" r="3.5" fill="#CC8A74"/>
+    <circle cx="10" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="28" cy="96" r="3.5" fill="#D0D0D0"/>
+  </g>
+
+  <!-- Card A — front-left, tilted, purple -->
+  <g filter="url(#cardShadow)" transform="translate(270, 470) rotate(-12)">
+    <rect x="-50" y="-108" width="100" height="216" rx="7" fill="#FFFFFF"/>
+    <rect x="-50" y="-108" width="100" height="20" rx="7" fill="#EDE4F6"/>
+    <rect x="-38" y="-94" width="45" height="4" rx="2" fill="#A088D0" opacity="0.5"/>
+    <rect x="-38" y="-80" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="-70" width="60" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="-58" width="76" height="60" rx="3" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="-38" y="10" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="20" width="55" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="32" width="76" height="36" rx="3" fill="#F5F0FB" opacity="0.35"/>
+    <rect x="-50" y="84" width="100" height="24" rx="0" fill="#FAFAFA"/>
+    <rect x="-50" y="84" width="100" height="0.5" fill="#E0E0E0"/>
+    <circle cx="-26" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="-8" cy="96" r="3.5" fill="#A088D0"/>
+    <circle cx="10" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="28" cy="96" r="3.5" fill="#D0D0D0"/>
+  </g>
+
+  <!-- Card B — front-right, tilted opposite, blue -->
+  <g filter="url(#cardShadow)" transform="translate(460, 500) rotate(9)">
+    <rect x="-50" y="-108" width="100" height="216" rx="7" fill="#FFFFFF"/>
+    <rect x="-50" y="-108" width="100" height="20" rx="7" fill="#E0F0F8"/>
+    <rect x="-38" y="-94" width="40" height="4" rx="2" fill="#6DB5CF" opacity="0.5"/>
+    <rect x="-38" y="-80" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="-70" width="76" height="75" rx="3" fill="#EFF6FB" opacity="0.5"/>
+    <rect x="-38" y="14" width="76" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="24" width="55" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="-38" y="36" width="60" height="28" rx="3" fill="#EFF6FB" opacity="0.35"/>
+    <rect x="-50" y="84" width="100" height="24" rx="0" fill="#FAFAFA"/>
+    <rect x="-50" y="84" width="100" height="0.5" fill="#E0E0E0"/>
+    <circle cx="-26" cy="96" r="3.5" fill="#6DB5CF"/>
+    <circle cx="-8" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="10" cy="96" r="3.5" fill="#D0D0D0"/>
+    <circle cx="28" cy="96" r="3.5" fill="#D0D0D0"/>
+  </g>
+
+  <text x="360" y="810" text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif"
+        font-size="18" font-weight="500" fill="#555555" letter-spacing="3">SCATTERED FILES</text>
+
+  <!-- ============ CENTER: Arrow ============ -->
+  <g filter="url(#arrowGlow)">
+    <circle cx="700" cy="480" r="42" fill="#9333EA"/>
+    <g stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <line x1="685" y1="480" x2="715" y2="480"/>
+      <polyline points="706,469 717,480 706,491"/>
+    </g>
+  </g>
+
+  <!-- ================================================================ -->
+  <!-- RIGHT: Organized Sections (After)                               -->
+  <!-- Cards: 80×173 = iPhone 13 ratio (390:844)                      -->
+  <!-- Section border: #9333EA, Scroll group: #18A0FB                  -->
+  <!-- ================================================================ -->
+
+  <!-- ===== Section 1: Home ===== -->
   <g filter="url(#sectionShadow)">
-    <rect x="120" y="180" width="780" height="330" rx="4" fill="#FAFAFA" stroke="#9333EA" stroke-width="1.5" opacity="0.9"/>
-    <text x="134" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Home</text>
+    <rect x="850" y="220" width="510" height="234" rx="5" fill="#1E1E36" stroke="#9333EA" stroke-width="2"/>
+    <text x="868" y="244" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Home</text>
   </g>
 
-  <!-- Home: Screen 1 -->
+  <!-- Home Card 1 — Figma Green -->
   <g filter="url(#cardShadow)">
-    <rect x="140" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="140" y="216" width="120" height="36" rx="6" fill="#E0E7FF"/>
-    <rect x="140" y="246" width="120" height="6" rx="0" fill="#E0E7FF" opacity="0"/>
-    <rect x="152" y="234" width="60" height="6" rx="2" fill="#818CF8" opacity="0.5"/>
-    <rect x="152" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="152" y="280" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="152" y="296" width="96" height="50" rx="4" fill="#EEF2FF" opacity="0.7"/>
-    <rect x="152" y="356" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="152" y="370" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="152" y="390" width="96" height="50" rx="4" fill="#EEF2FF" opacity="0.5"/>
-    <rect x="152" y="450" width="60" height="8" rx="2" fill="#F1F5F9"/>
-    <!-- Bottom nav -->
-    <rect x="140" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="140" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="162" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="186" cy="475" r="4" fill="#818CF8"/>
-    <circle cx="210" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="234" cy="475" r="4" fill="#CBD5E1"/>
+    <rect x="868" y="258" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="868" y="258" width="80" height="18" rx="5" fill="#E2F5ED"/>
+    <rect x="877" y="268" width="34" height="4" rx="2" fill="#5BBF99" opacity="0.5"/>
+    <rect x="877" y="284" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="877" y="293" width="46" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="877" y="304" width="62" height="48" rx="3" fill="#F0FAF5" opacity="0.5"/>
+    <rect x="877" y="360" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="877" y="370" width="42" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="877" y="382" width="62" height="30" rx="3" fill="#F0FAF5" opacity="0.3"/>
+    <rect x="868" y="409" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="868" y="409" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="884" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="898" cy="420" r="3" fill="#5BBF99"/>
+    <circle cx="912" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="926" cy="420" r="3" fill="#D0D0D0"/>
   </g>
 
-  <!-- Home: Screen 2 -->
+  <!-- Home Card 2 — Figma Blue -->
   <g filter="url(#cardShadow)">
-    <rect x="270" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="270" y="216" width="120" height="36" rx="6" fill="#DBEAFE"/>
-    <rect x="282" y="234" width="50" height="6" rx="2" fill="#60A5FA" opacity="0.5"/>
-    <rect x="282" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="280" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="296" width="96" height="80" rx="4" fill="#EFF6FF" opacity="0.7"/>
-    <rect x="282" y="386" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="400" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="420" width="80" height="30" rx="4" fill="#EFF6FF" opacity="0.5"/>
-    <rect x="270" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="270" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="292" cy="475" r="4" fill="#60A5FA"/>
-    <circle cx="316" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="340" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="364" cy="475" r="4" fill="#CBD5E1"/>
+    <rect x="960" y="258" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="960" y="258" width="80" height="18" rx="5" fill="#E0F0F8"/>
+    <rect x="969" y="268" width="30" height="4" rx="2" fill="#6DB5CF" opacity="0.5"/>
+    <rect x="969" y="284" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="969" y="293" width="62" height="70" rx="3" fill="#EFF6FB" opacity="0.5"/>
+    <rect x="969" y="372" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="969" y="382" width="42" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="960" y="409" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="960" y="409" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="976" cy="420" r="3" fill="#6DB5CF"/>
+    <circle cx="990" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1004" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1018" cy="420" r="3" fill="#D0D0D0"/>
   </g>
 
-  <!-- Home: Scroll Group (2 stacked screens with blue border) -->
-  <rect x="396" y="212" width="128" height="288" rx="8" fill="none" stroke="#18A0FB" stroke-width="2"/>
-  <text x="520" y="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" fill="#18A0FB" opacity="0.8">scroll</text>
+  <!-- Home Scroll Group — Figma Coral, blue dashed border -->
+  <rect x="1048" y="254" width="88" height="182" rx="5" fill="none" stroke="#18A0FB" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <text x="1132" y="252" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="500" fill="#18A0FB" opacity="0.7">scroll</text>
 
   <g filter="url(#cardShadow)">
-    <rect x="400" y="216" width="120" height="140" rx="6" fill="white"/>
-    <rect x="400" y="216" width="120" height="36" rx="6" fill="#FCE7F3"/>
-    <rect x="412" y="234" width="55" height="6" rx="2" fill="#F472B6" opacity="0.5"/>
-    <rect x="412" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="412" y="280" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="412" y="296" width="96" height="46" rx="4" fill="#FDF2F8" opacity="0.7"/>
+    <rect x="1052" y="258" width="80" height="84" rx="5" fill="#FFFFFF"/>
+    <rect x="1052" y="258" width="80" height="18" rx="5" fill="#F8E4E0"/>
+    <rect x="1061" y="268" width="36" height="4" rx="2" fill="#D49C94" opacity="0.5"/>
+    <rect x="1061" y="284" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1061" y="293" width="62" height="36" rx="3" fill="#FBF0EE" opacity="0.5"/>
   </g>
   <g filter="url(#cardShadow)">
-    <rect x="400" y="356" width="120" height="140" rx="6" fill="white" opacity="0.95"/>
-    <rect x="412" y="366" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="412" y="380" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="412" y="396" width="96" height="50" rx="4" fill="#FDF2F8" opacity="0.5"/>
-    <rect x="412" y="456" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="400" y="474" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="400" y="474" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="422" cy="485" r="4" fill="#CBD5E1"/>
-    <circle cx="446" cy="485" r="4" fill="#CBD5E1"/>
-    <circle cx="470" cy="485" r="4" fill="#F472B6"/>
-    <circle cx="494" cy="485" r="4" fill="#CBD5E1"/>
+    <rect x="1052" y="345" width="80" height="86" rx="5" fill="#FFFFFF" opacity="0.95"/>
+    <rect x="1061" y="355" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1061" y="365" width="46" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1061" y="376" width="62" height="30" rx="3" fill="#FBF0EE" opacity="0.4"/>
+    <rect x="1052" y="409" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="1052" y="409" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="1068" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1082" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1096" cy="420" r="3" fill="#D49C94"/>
+    <circle cx="1110" cy="420" r="3" fill="#D0D0D0"/>
   </g>
 
-  <!-- Home: Screen 4 -->
+  <!-- Home Card 4 — Figma Purple -->
   <g filter="url(#cardShadow)">
-    <rect x="540" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="540" y="216" width="120" height="36" rx="6" fill="#D1FAE5"/>
-    <rect x="552" y="234" width="48" height="6" rx="2" fill="#34D399" opacity="0.5"/>
-    <rect x="552" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="552" y="280" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="552" y="296" width="96" height="60" rx="4" fill="#ECFDF5" opacity="0.7"/>
-    <rect x="552" y="366" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="552" y="380" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="540" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="540" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="562" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="586" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="610" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="634" cy="475" r="4" fill="#34D399"/>
+    <rect x="1148" y="258" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="1148" y="258" width="80" height="18" rx="5" fill="#EDE4F6"/>
+    <rect x="1157" y="268" width="38" height="4" rx="2" fill="#A088D0" opacity="0.5"/>
+    <rect x="1157" y="284" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="293" width="46" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="304" width="62" height="55" rx="3" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="1157" y="368" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="378" width="42" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1148" y="409" width="80" height="22" rx="5" fill="#FAFAFA"/>
+    <rect x="1148" y="409" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="1164" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1178" cy="420" r="3" fill="#D0D0D0"/>
+    <circle cx="1192" cy="420" r="3" fill="#A088D0"/>
+    <circle cx="1206" cy="420" r="3" fill="#D0D0D0"/>
   </g>
 
-  <!-- Home: Screen 5 -->
-  <g filter="url(#cardShadow)">
-    <rect x="670" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="670" y="216" width="120" height="36" rx="6" fill="#FEF3C7"/>
-    <rect x="682" y="234" width="56" height="6" rx="2" fill="#F59E0B" opacity="0.5"/>
-    <rect x="682" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="682" y="280" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="682" y="296" width="96" height="80" rx="4" fill="#FFFBEB" opacity="0.7"/>
-    <rect x="682" y="386" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="670" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="670" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="692" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="716" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="740" cy="475" r="4" fill="#F59E0B"/>
-    <circle cx="764" cy="475" r="4" fill="#CBD5E1"/>
+  <!-- Home Card 5 — partial/faded edge, Figma Red -->
+  <g filter="url(#cardShadow)" opacity="0.45">
+    <rect x="1240" y="258" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="1240" y="258" width="80" height="18" rx="5" fill="#F6E2DA"/>
+    <rect x="1249" y="268" width="30" height="4" rx="2" fill="#CC8A74" opacity="0.5"/>
+    <rect x="1249" y="284" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1249" y="293" width="62" height="50" rx="3" fill="#FBF0EC" opacity="0.5"/>
   </g>
 
-  <!-- ============ Section 2: Search (top-right) ============ -->
+  <!-- ===== Section 2: Settings ===== -->
   <g filter="url(#sectionShadow)">
-    <rect x="940" y="180" width="860" height="330" rx="4" fill="#FAFAFA" stroke="#9333EA" stroke-width="1.5" opacity="0.9"/>
-    <text x="954" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Search</text>
+    <rect x="850" y="484" width="510" height="234" rx="5" fill="#1E1E36" stroke="#9333EA" stroke-width="2"/>
+    <text x="868" y="508" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Settings</text>
   </g>
 
-  <!-- Search: Screen 1 -->
+  <!-- Settings Card 1 — Figma Purple (settings row pattern) -->
   <g filter="url(#cardShadow)">
-    <rect x="960" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="960" y="216" width="120" height="36" rx="6" fill="#E0E7FF"/>
-    <rect x="972" y="230" width="96" height="16" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="0.5"/>
-    <rect x="980" y="236" width="40" height="4" rx="2" fill="#94A3B8" opacity="0.4"/>
-    <rect x="972" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="972" y="280" width="96" height="80" rx="4" fill="#EEF2FF" opacity="0.6"/>
-    <rect x="972" y="370" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="972" y="384" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="960" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="960" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="982" cy="475" r="4" fill="#818CF8"/>
-    <circle cx="1006" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1030" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1054" cy="475" r="4" fill="#CBD5E1"/>
+    <rect x="868" y="522" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="868" y="522" width="80" height="18" rx="5" fill="#EDE4F6"/>
+    <rect x="877" y="532" width="36" height="4" rx="2" fill="#A088D0" opacity="0.5"/>
+    <rect x="877" y="550" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.7"/>
+    <rect x="877" y="568" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="877" y="586" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.7"/>
+    <rect x="877" y="604" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="877" y="622" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.7"/>
+    <rect x="877" y="640" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="868" y="673" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="868" y="673" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="884" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="898" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="912" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="926" cy="684" r="3" fill="#A088D0"/>
   </g>
 
-  <!-- Search: Screen 2 -->
+  <!-- Settings Card 2 — Figma Purple lighter -->
   <g filter="url(#cardShadow)">
-    <rect x="1090" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="1090" y="216" width="120" height="36" rx="6" fill="#E0E7FF"/>
-    <rect x="1102" y="230" width="96" height="16" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="0.5"/>
-    <rect x="1110" y="236" width="60" height="4" rx="2" fill="#94A3B8" opacity="0.4"/>
-    <rect x="1102" y="266" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.6"/>
-    <rect x="1102" y="336" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.4"/>
-    <rect x="1102" y="406" width="96" height="40" rx="4" fill="#EEF2FF" opacity="0.3"/>
-    <rect x="1090" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1090" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1112" cy="475" r="4" fill="#818CF8"/>
-    <circle cx="1136" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1160" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1184" cy="475" r="4" fill="#CBD5E1"/>
+    <rect x="960" y="522" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="960" y="522" width="80" height="18" rx="5" fill="#EDE4F6"/>
+    <rect x="969" y="532" width="30" height="4" rx="2" fill="#A088D0" opacity="0.5"/>
+    <rect x="969" y="550" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="969" y="568" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.7"/>
+    <rect x="969" y="586" width="62" height="14" rx="2.5" fill="#F5F0FB" opacity="0.5"/>
+    <rect x="969" y="604" width="62" height="28" rx="2.5" fill="#F5F0FB" opacity="0.7"/>
+    <rect x="960" y="673" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="960" y="673" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="976" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="990" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1004" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1018" cy="684" r="3" fill="#A088D0"/>
   </g>
 
-  <!-- Search: Scroll Group -->
-  <rect x="1216" y="212" width="128" height="288" rx="8" fill="none" stroke="#18A0FB" stroke-width="2"/>
-  <text x="1340" y="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" fill="#18A0FB" opacity="0.8">scroll</text>
-
+  <!-- Settings Card 3 — Figma Blue -->
   <g filter="url(#cardShadow)">
-    <rect x="1220" y="216" width="120" height="140" rx="6" fill="white"/>
-    <rect x="1220" y="216" width="120" height="36" rx="6" fill="#DBEAFE"/>
-    <rect x="1232" y="234" width="45" height="6" rx="2" fill="#60A5FA" opacity="0.5"/>
-    <rect x="1232" y="266" width="96" height="60" rx="4" fill="#EFF6FF" opacity="0.6"/>
-    <rect x="1232" y="336" width="96" height="8" rx="2" fill="#F1F5F9"/>
+    <rect x="1052" y="522" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="1052" y="522" width="80" height="18" rx="5" fill="#E0F0F8"/>
+    <rect x="1061" y="532" width="34" height="4" rx="2" fill="#6DB5CF" opacity="0.5"/>
+    <rect x="1061" y="550" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1061" y="559" width="46" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1061" y="570" width="62" height="80" rx="3" fill="#EFF6FB" opacity="0.5"/>
+    <rect x="1061" y="658" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1052" y="673" width="80" height="22" rx="0" fill="#FAFAFA"/>
+    <rect x="1052" y="673" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="1068" cy="684" r="3" fill="#6DB5CF"/>
+    <circle cx="1082" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1096" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1110" cy="684" r="3" fill="#D0D0D0"/>
   </g>
+
+  <!-- Settings Card 4 — Figma Red -->
   <g filter="url(#cardShadow)">
-    <rect x="1220" y="356" width="120" height="140" rx="6" fill="white" opacity="0.95"/>
-    <rect x="1232" y="366" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1232" y="380" width="96" height="60" rx="4" fill="#EFF6FF" opacity="0.5"/>
-    <rect x="1232" y="450" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1220" y="474" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1220" y="474" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1242" cy="485" r="4" fill="#60A5FA"/>
-    <circle cx="1266" cy="485" r="4" fill="#CBD5E1"/>
-    <circle cx="1290" cy="485" r="4" fill="#CBD5E1"/>
-    <circle cx="1314" cy="485" r="4" fill="#CBD5E1"/>
+    <rect x="1148" y="522" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="1148" y="522" width="80" height="18" rx="5" fill="#F6E2DA"/>
+    <rect x="1157" y="532" width="38" height="4" rx="2" fill="#CC8A74" opacity="0.5"/>
+    <rect x="1157" y="550" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="559" width="46" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="570" width="62" height="65" rx="3" fill="#FBF0EC" opacity="0.5"/>
+    <rect x="1157" y="644" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1157" y="654" width="42" height="3" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1148" y="673" width="80" height="22" rx="5" fill="#FAFAFA"/>
+    <rect x="1148" y="673" width="80" height="0.5" fill="#E0E0E0"/>
+    <circle cx="1164" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1178" cy="684" r="3" fill="#CC8A74"/>
+    <circle cx="1192" cy="684" r="3" fill="#D0D0D0"/>
+    <circle cx="1206" cy="684" r="3" fill="#D0D0D0"/>
   </g>
 
-  <!-- Search: Screen 4 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1360" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="1360" y="216" width="120" height="36" rx="6" fill="#D1FAE5"/>
-    <rect x="1372" y="234" width="55" height="6" rx="2" fill="#34D399" opacity="0.5"/>
-    <rect x="1372" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1372" y="280" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1372" y="296" width="96" height="80" rx="4" fill="#ECFDF5" opacity="0.6"/>
-    <rect x="1372" y="386" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1372" y="400" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1360" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1360" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1382" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1406" cy="475" r="4" fill="#34D399"/>
-    <circle cx="1430" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1454" cy="475" r="4" fill="#CBD5E1"/>
+  <!-- Settings Card 5 — partial/faded edge, Figma Coral -->
+  <g filter="url(#cardShadow)" opacity="0.45">
+    <rect x="1240" y="522" width="80" height="173" rx="5" fill="#FFFFFF"/>
+    <rect x="1240" y="522" width="80" height="18" rx="5" fill="#F8E4E0"/>
+    <rect x="1249" y="532" width="30" height="4" rx="2" fill="#D49C94" opacity="0.5"/>
+    <rect x="1249" y="550" width="62" height="4" rx="1.5" fill="#EBEBEB"/>
+    <rect x="1249" y="559" width="62" height="50" rx="3" fill="#FBF0EE" opacity="0.5"/>
   </g>
 
-  <!-- Search: Screen 5 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1490" y="216" width="120" height="270" rx="6" fill="white"/>
-    <rect x="1490" y="216" width="120" height="36" rx="6" fill="#FCE7F3"/>
-    <rect x="1502" y="234" width="50" height="6" rx="2" fill="#F472B6" opacity="0.5"/>
-    <rect x="1502" y="266" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1502" y="280" width="96" height="100" rx="4" fill="#FDF2F8" opacity="0.6"/>
-    <rect x="1502" y="390" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1490" y="464" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1490" y="464" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1512" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1536" cy="475" r="4" fill="#CBD5E1"/>
-    <circle cx="1560" cy="475" r="4" fill="#F472B6"/>
-    <circle cx="1584" cy="475" r="4" fill="#CBD5E1"/>
+  <!-- Decorative section badges -->
+  <g opacity="0.45">
+    <rect x="1370" y="212" width="60" height="16" rx="3" fill="#9333EA"/>
+    <text x="1400" y="224" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#FFFFFF" text-anchor="middle">Section</text>
+    <rect x="1370" y="476" width="60" height="16" rx="3" fill="#9333EA"/>
+    <text x="1400" y="488" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#FFFFFF" text-anchor="middle">Section</text>
   </g>
 
-  <!-- ============ Section 3: Profile (bottom-left) ============ -->
-  <g filter="url(#sectionShadow)">
-    <rect x="120" y="540" width="650" height="380" rx="4" fill="#FAFAFA" stroke="#9333EA" stroke-width="1.5" opacity="0.9"/>
-    <text x="134" y="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Profile</text>
-  </g>
-
-  <!-- Profile: Screen 1 -->
-  <g filter="url(#cardShadow)">
-    <rect x="140" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="140" y="576" width="120" height="36" rx="6" fill="#FEF3C7"/>
-    <rect x="152" y="594" width="50" height="6" rx="2" fill="#F59E0B" opacity="0.5"/>
-    <circle cx="200" cy="646" r="24" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
-    <rect x="168" y="680" width="64" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="178" y="694" width="44" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="152" y="716" width="96" height="30" rx="4" fill="#FFFBEB" opacity="0.6"/>
-    <rect x="152" y="756" width="96" height="30" rx="4" fill="#FFFBEB" opacity="0.4"/>
-    <rect x="140" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="140" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="162" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="186" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="210" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="234" cy="885" r="4" fill="#F59E0B"/>
-  </g>
-
-  <!-- Profile: Scroll Group -->
-  <rect x="266" y="572" width="128" height="328" rx="8" fill="none" stroke="#18A0FB" stroke-width="2"/>
-  <text x="390" y="570" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" fill="#18A0FB" opacity="0.8">scroll</text>
-
-  <g filter="url(#cardShadow)">
-    <rect x="270" y="576" width="120" height="160" rx="6" fill="white"/>
-    <rect x="270" y="576" width="120" height="36" rx="6" fill="#E0E7FF"/>
-    <rect x="282" y="594" width="55" height="6" rx="2" fill="#818CF8" opacity="0.5"/>
-    <rect x="282" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="640" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="656" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.6"/>
-  </g>
-  <g filter="url(#cardShadow)">
-    <rect x="270" y="736" width="120" height="160" rx="6" fill="white" opacity="0.95"/>
-    <rect x="282" y="746" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="760" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="282" y="776" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.5"/>
-    <rect x="282" y="846" width="60" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="270" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="270" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="292" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="316" cy="885" r="4" fill="#818CF8"/>
-    <circle cx="340" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="364" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Profile: Screen 3 -->
-  <g filter="url(#cardShadow)">
-    <rect x="410" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="410" y="576" width="120" height="36" rx="6" fill="#DBEAFE"/>
-    <rect x="422" y="594" width="48" height="6" rx="2" fill="#60A5FA" opacity="0.5"/>
-    <rect x="422" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="422" y="640" width="96" height="100" rx="4" fill="#EFF6FF" opacity="0.6"/>
-    <rect x="422" y="750" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="422" y="764" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="410" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="410" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="432" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="456" cy="885" r="4" fill="#60A5FA"/>
-    <circle cx="480" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="504" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Profile: Screen 4 -->
-  <g filter="url(#cardShadow)">
-    <rect x="540" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="540" y="576" width="120" height="36" rx="6" fill="#D1FAE5"/>
-    <rect x="552" y="594" width="56" height="6" rx="2" fill="#34D399" opacity="0.5"/>
-    <rect x="552" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="552" y="640" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="552" y="656" width="96" height="80" rx="4" fill="#ECFDF5" opacity="0.6"/>
-    <rect x="552" y="746" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="540" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="540" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="562" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="586" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="610" cy="885" r="4" fill="#34D399"/>
-    <circle cx="634" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- ============ Section 4: Settings (bottom-right) ============ -->
-  <g filter="url(#sectionShadow)">
-    <rect x="810" y="540" width="990" height="380" rx="4" fill="#FAFAFA" stroke="#9333EA" stroke-width="1.5" opacity="0.9"/>
-    <text x="824" y="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#9333EA">Settings</text>
-  </g>
-
-  <!-- Settings: Screen 1 -->
-  <g filter="url(#cardShadow)">
-    <rect x="830" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="830" y="576" width="120" height="36" rx="6" fill="#F3E8FF"/>
-    <rect x="842" y="594" width="55" height="6" rx="2" fill="#A855F7" opacity="0.5"/>
-    <rect x="842" y="626" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.8"/>
-    <rect x="842" y="654" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.6"/>
-    <rect x="842" y="682" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.8"/>
-    <rect x="842" y="710" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.6"/>
-    <rect x="842" y="738" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.8"/>
-    <rect x="830" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="830" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="852" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="876" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="900" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="924" cy="885" r="4" fill="#A855F7"/>
-  </g>
-
-  <!-- Settings: Screen 2 -->
-  <g filter="url(#cardShadow)">
-    <rect x="960" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="960" y="576" width="120" height="36" rx="6" fill="#F3E8FF"/>
-    <rect x="972" y="594" width="48" height="6" rx="2" fill="#A855F7" opacity="0.5"/>
-    <rect x="972" y="626" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.6"/>
-    <rect x="972" y="654" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.8"/>
-    <rect x="972" y="682" width="96" height="20" rx="4" fill="#FAF5FF" opacity="0.6"/>
-    <rect x="972" y="710" width="96" height="40" rx="4" fill="#FAF5FF" opacity="0.8"/>
-    <rect x="960" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="960" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="982" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1006" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1030" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1054" cy="885" r="4" fill="#A855F7"/>
-  </g>
-
-  <!-- Settings: Screen 3 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1090" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="1090" y="576" width="120" height="36" rx="6" fill="#DBEAFE"/>
-    <rect x="1102" y="594" width="50" height="6" rx="2" fill="#60A5FA" opacity="0.5"/>
-    <rect x="1102" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1102" y="640" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1102" y="656" width="96" height="100" rx="4" fill="#EFF6FF" opacity="0.6"/>
-    <rect x="1102" y="766" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1090" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1090" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1112" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1136" cy="885" r="4" fill="#60A5FA"/>
-    <circle cx="1160" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1184" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Settings: Scroll Group -->
-  <rect x="1216" y="572" width="128" height="328" rx="8" fill="none" stroke="#18A0FB" stroke-width="2"/>
-  <text x="1340" y="570" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" fill="#18A0FB" opacity="0.8">scroll</text>
-
-  <g filter="url(#cardShadow)">
-    <rect x="1220" y="576" width="120" height="160" rx="6" fill="white"/>
-    <rect x="1220" y="576" width="120" height="36" rx="6" fill="#FCE7F3"/>
-    <rect x="1232" y="594" width="50" height="6" rx="2" fill="#F472B6" opacity="0.5"/>
-    <rect x="1232" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1232" y="640" width="96" height="80" rx="4" fill="#FDF2F8" opacity="0.6"/>
-  </g>
-  <g filter="url(#cardShadow)">
-    <rect x="1220" y="736" width="120" height="160" rx="6" fill="white" opacity="0.95"/>
-    <rect x="1232" y="746" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1232" y="760" width="96" height="80" rx="4" fill="#FDF2F8" opacity="0.5"/>
-    <rect x="1232" y="850" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1220" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1220" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1242" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1266" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1290" cy="885" r="4" fill="#F472B6"/>
-    <circle cx="1314" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Settings: Screen 5 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1360" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="1360" y="576" width="120" height="36" rx="6" fill="#FEF3C7"/>
-    <rect x="1372" y="594" width="55" height="6" rx="2" fill="#F59E0B" opacity="0.5"/>
-    <rect x="1372" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1372" y="640" width="70" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1372" y="656" width="96" height="80" rx="4" fill="#FFFBEB" opacity="0.6"/>
-    <rect x="1372" y="746" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1360" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1360" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1382" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1406" cy="885" r="4" fill="#F59E0B"/>
-    <circle cx="1430" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1454" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Settings: Screen 6 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1490" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="1490" y="576" width="120" height="36" rx="6" fill="#D1FAE5"/>
-    <rect x="1502" y="594" width="48" height="6" rx="2" fill="#34D399" opacity="0.5"/>
-    <rect x="1502" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1502" y="640" width="96" height="80" rx="4" fill="#ECFDF5" opacity="0.6"/>
-    <rect x="1502" y="730" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1502" y="744" width="60" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1490" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1490" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1512" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1536" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1560" cy="885" r="4" fill="#34D399"/>
-    <circle cx="1584" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
-
-  <!-- Settings: Screen 7 -->
-  <g filter="url(#cardShadow)">
-    <rect x="1620" y="576" width="120" height="320" rx="6" fill="white"/>
-    <rect x="1620" y="576" width="120" height="36" rx="6" fill="#E0E7FF"/>
-    <rect x="1632" y="594" width="52" height="6" rx="2" fill="#818CF8" opacity="0.5"/>
-    <rect x="1632" y="626" width="96" height="8" rx="2" fill="#F1F5F9"/>
-    <rect x="1632" y="640" width="80" height="6" rx="2" fill="#F1F5F9"/>
-    <rect x="1632" y="656" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.6"/>
-    <rect x="1632" y="726" width="96" height="60" rx="4" fill="#EEF2FF" opacity="0.4"/>
-    <rect x="1620" y="874" width="120" height="22" rx="0" fill="#F8FAFC"/>
-    <rect x="1620" y="874" width="120" height="0.5" fill="#E2E8F0"/>
-    <circle cx="1642" cy="885" r="4" fill="#818CF8"/>
-    <circle cx="1666" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1690" cy="885" r="4" fill="#CBD5E1"/>
-    <circle cx="1714" cy="885" r="4" fill="#CBD5E1"/>
-  </g>
+  <text x="1100" y="760" text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif"
+        font-size="18" font-weight="500" fill="#555555" letter-spacing="3">ORGANIZED SECTIONS</text>
 
 </svg>

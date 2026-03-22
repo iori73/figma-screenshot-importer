@@ -35,6 +35,16 @@ Features:
 • キャンセル機能
 • 画像幅・検出感度の調整
 
+## Data Security Answers (Step 3)
+
+| Question | Answer |
+|----------|--------|
+| Q1. Backend service? | **No, I do not host a backend service for my plugin/widget.** |
+| Q2. Network requests? | **My plugin/widget does not make any network requests.** (`networkAccess: ["none"]`) |
+| Q3. User authentication? | **No, my plugin/widget does not require or use any user authentication.** |
+| Q4. Store Figma API data? | **Yes — locally** (localStorage for language preference `bsi-lang` only. No Figma design data is stored.) |
+| Q5. Update management? | **I am a solo developer. I manage and update my plugin/widget myself.** |
+
 ## Publishing Steps
 
 1. Go to https://www.figma.com/community
@@ -42,4 +52,5 @@ Features:
 3. Upload the cover image and icon
 4. Paste the description
 5. Select appropriate category tags
-6. Submit for review
+6. Fill in Data Security answers (see above)
+7. Submit for review

@@ -83,46 +83,44 @@ body {
 }
 
 h2 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
-.section { margin-bottom: 16px; }
-
-/* ---- Mode Tabs ---- */
-.mode-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 16px;
-}
-.mode-tab {
-  flex: 1; padding: 10px 0; background: none; border: none;
-  border-bottom: 2px solid transparent; font-size: 12px; font-weight: 500;
-  color: var(--text-tertiary); cursor: pointer; transition: all 0.2s;
-  width: auto; border-radius: 0;
-}
-.mode-tab:hover { color: var(--text); background: var(--bg-hover); }
-.mode-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.mode-tab[aria-selected="true"] {
-  color: var(--accent); border-bottom-color: var(--accent); background: none;
-}
-.mode-content { display: none; padding: 0 16px 16px; }
-.mode-content.active { display: block; }
-.mode-desc {
-  font-size: 11px; color: var(--text-secondary); line-height: 1.5;
-  padding: 10px 16px; background: var(--purple-bg); border-radius: 6px;
-  margin: 0 16px 12px;
-}
+.section { margin-bottom: 12px; }
+.first-section { padding-top: 16px; }
+.pad { padding-left: 16px; padding-right: 16px; }
 
 /* ---- Drop Zone ---- */
 .drop-zone {
-  border: 2px dashed var(--border-dashed); border-radius: 8px; padding: 24px;
+  border: 2px dashed var(--border-dashed); border-radius: 8px; padding: 28px 16px;
   text-align: center; cursor: pointer; transition: all 0.2s;
 }
 .drop-zone:hover { border-color: var(--accent); background: var(--accent-bg); }
 .drop-zone:focus-within { border-color: var(--accent); background: var(--accent-bg); }
 .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-bg-strong); }
+.drop-zone.has-files {
+  padding: 12px 16px; border-style: solid; border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.drop-zone.has-files .drop-zone-text strong { font-size: 12px; }
 .drop-zone input[type="file"] { display: none; }
 .drop-zone-text { color: var(--text-secondary); }
-.drop-zone-text strong { color: var(--accent); }
+.drop-zone-text strong { color: var(--accent); font-size: 13px; }
+.drop-zone-sub { font-size: 11px; color: var(--text-tertiary); }
 
-/* ---- Preview (Folder Mode) ---- */
+.file-alt {
+  margin-top: 10px; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.file-alt-divider {
+  font-size: 10px; color: var(--text-tertiary); text-transform: lowercase;
+}
+.file-alt-btn {
+  font-size: 11px; color: var(--accent); background: none; border: none;
+  cursor: pointer; text-decoration: underline; padding: 4px 8px;
+}
+.file-alt-btn:hover { color: var(--accent-hover); }
+.clear-all-btn { color: var(--danger); text-decoration: underline; }
+.clear-all-btn:hover { color: #be123c; }
+
+/* ---- Folder Preview ---- */
 .preview {
   max-height: 300px; overflow-y: auto; border: 1px solid var(--border);
   border-radius: 4px; padding: 8px; background: var(--bg-secondary);
@@ -165,8 +163,27 @@ button.cancel-btn {
 button.cancel-btn:hover { background: var(--danger-bg); }
 button.cancel-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
 
-/* ---- Settings ---- */
-.settings { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+/* ---- Settings Accordion ---- */
+.settings-accordion {
+  border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+}
+.settings-accordion summary {
+  padding: 8px 12px; font-size: 12px; font-weight: 500; cursor: pointer;
+  color: var(--text-secondary); background: var(--bg-secondary);
+  list-style: none; display: flex; align-items: center; gap: 6px;
+}
+.settings-accordion summary::before {
+  content: '⚙'; font-size: 13px;
+}
+.settings-accordion summary::after {
+  content: '▸'; margin-left: auto; transition: transform 0.2s;
+}
+.settings-accordion[open] summary::after { transform: rotate(90deg); }
+.settings-accordion summary:hover { background: var(--bg-hover); }
+.settings-body { padding: 10px 12px; }
+
+.settings { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.settings:last-child { margin-bottom: 0; }
 .setting-item { display: flex; flex-direction: column; gap: 4px; }
 .setting-item label { font-size: 11px; color: var(--text-secondary); }
 .setting-item input[type="number"] {
@@ -177,40 +194,6 @@ button.cancel-btn:focus-visible { outline: 2px solid var(--danger); outline-offs
 .setting-hint { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
 .setting-link { font-size: 10px; color: var(--accent); text-decoration: none; margin-top: 2px; }
 .setting-link:hover { text-decoration: underline; }
-.optional-badge { font-weight: 400; color: var(--text-tertiary); font-size: 10px; }
-.api-key-wrapper { display: flex; gap: 4px; align-items: center; }
-.api-key-wrapper input {
-  flex: 1; padding: 6px 8px; border: 1px solid var(--border-secondary); border-radius: 4px;
-  font-size: 11px; font-family: monospace; background: var(--bg); color: var(--text);
-}
-.api-key-wrapper input:focus { outline: none; border-color: var(--accent); }
-.api-key-toggle {
-  padding: 4px 6px; border: 1px solid var(--border-secondary); border-radius: 4px;
-  background: var(--bg); cursor: pointer; line-height: 1; color: var(--text-secondary);
-  display: flex; align-items: center; justify-content: center;
-}
-.api-key-toggle:hover { border-color: var(--accent); color: var(--text); }
-.eye-icon { width: 14px; height: 14px; }
-.eye-icon .eye-slash { display: block; }
-input[type="text"] + .api-key-toggle .eye-slash,
-.api-key-visible .eye-slash { display: none; }
-.ai-status {
-  display: flex; align-items: center; gap: 6px; padding: 6px 8px; margin-top: 6px;
-  border-radius: 4px; font-size: 11px;
-}
-.ai-status.loading { background: var(--purple-bg); color: var(--purple); }
-.ai-status.success { background: #e8f5e9; color: #2e7d32; }
-.ai-status.error { background: #fce4ec; color: #c62828; }
-@media (prefers-color-scheme: dark) {
-  .ai-status.success { background: #1b3b1f; color: #81c784; }
-  .ai-status.error { background: #3b1f1f; color: #ef9a9a; }
-}
-.ai-spinner {
-  width: 12px; height: 12px; border: 2px solid var(--purple-bg); border-top-color: var(--purple);
-  border-radius: 50%; animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
 /* ---- Smart Import Preview ---- */
 .smart-preview {
   max-height: 400px; overflow-y: auto; border: 1px solid var(--border);
@@ -235,12 +218,6 @@ input[type="text"] + .api-key-toggle .eye-slash,
   color: var(--text-tertiary); font-style: italic; font-weight: 400;
 }
 .section-name-input:focus { outline: none; border-color: var(--accent); }
-.section-accept-hint {
-  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  font-size: 9px; color: var(--text-tertiary); background: var(--border-secondary);
-  padding: 1px 4px; border-radius: 3px; opacity: 0;
-  transition: opacity 0.15s; pointer-events: none; white-space: nowrap;
-}
 .smart-section-count { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
 .smart-section-thumbs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
 .smart-group-wrapper { display: flex; flex-direction: column; gap: 0; flex-shrink: 0; }
@@ -274,6 +251,15 @@ input[type="text"] + .api-key-toggle .eye-slash,
   color: var(--skipped-text); font-size: 11px; margin-top: 6px;
 }
 
+/* Folder preview section name input (inline in tree) */
+.preview .section-name-input {
+  font-family: monospace; font-size: 11px; font-weight: bold;
+  color: var(--purple); background: var(--bg); border: 1px solid var(--accent);
+  border-radius: 3px; padding: 1px 4px; margin-left: 2px; width: 55%;
+  outline: none;
+}
+.preview .section-name-input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
 /* ---- Footer ---- */
 .footer {
   display: flex; justify-content: center; align-items: center; gap: 12px;
@@ -298,174 +284,116 @@ input[type="text"] + .api-key-toggle .eye-slash,
 </head>
 <body>
 
-  <!-- ============== Mode Tabs ============== -->
-  <div class="mode-tabs" role="tablist" aria-label="Import mode">
-    <button class="mode-tab" role="tab" id="tabFolder"
-            aria-selected="true" aria-controls="folderMode" tabindex="0"
-            onclick="switchMode('folder')">
-      <span data-i18n="tabFolder">Folder Import</span>
-    </button>
-    <button class="mode-tab" role="tab" id="tabSmart"
-            aria-selected="false" aria-controls="smartMode" tabindex="-1"
-            onclick="switchMode('smart')">
-      <span data-i18n="tabSmart">Smart Import</span>
-    </button>
+  <!-- ============== Select Images ============== -->
+  <div class="section pad first-section" id="selectSection">
+    <div class="drop-zone" id="dropZone" role="button" tabindex="0"
+         aria-label="Select screenshots">
+      <input type="file" id="folderInput" webkitdirectory directory multiple
+             aria-label="Folder file picker">
+      <p class="drop-zone-text">
+        <strong data-i18n="clickSelectFolder">Click to select folder</strong><br>
+        <span class="drop-zone-sub" data-i18n="dropHint">or drop image files here (not folders)</span>
+      </p>
+    </div>
+    <div class="file-alt">
+      <span class="file-alt-divider" data-i18n="orDivider">or</span>
+      <button class="file-alt-btn" id="fileSelectBtn" type="button"
+              data-i18n="chooseFiles">Choose individual files</button>
+      <input type="file" id="fileInput" multiple accept="image/png,image/jpeg"
+             style="display:none" aria-label="Individual file picker">
+      <button class="file-alt-btn clear-all-btn" id="clearAllBtn" type="button"
+              style="display:none" onclick="clearAllFiles()" data-i18n="clearAll">Clear all</button>
+    </div>
+    <div id="skippedNotice" aria-live="polite"></div>
   </div>
 
-  <!-- ============== Folder Import Mode ============== -->
-  <div id="folderMode" class="mode-content active" role="tabpanel" aria-labelledby="tabFolder">
-    <div class="mode-desc" data-i18n="folderDesc">Already organized your screenshots into folders? Import the folder structure directly as Figma Sections.</div>
-    <div class="section">
-      <h2 data-i18n="folderStep1">1. Select Screenshot Folder</h2>
-      <div class="drop-zone" id="dropZone" role="button" tabindex="0"
-           aria-label="Select screenshot folder">
-        <input type="file" id="folderInput" webkitdirectory directory multiple
-               aria-label="Folder file picker">
-        <p class="drop-zone-text">
-          <strong data-i18n="clickSelectFolder">Click to select folder</strong>
-        </p>
-      </div>
-      <div style="margin-top: 8px; text-align: center;">
-        <span style="color: var(--text-secondary); font-size: 11px;"
-              data-i18n="orSelectFiles">Or select individual image files:</span>
-        <input type="file" id="fileInput" multiple accept="image/png,image/jpeg"
-               style="margin-top: 4px;" aria-label="Individual file picker">
-      </div>
+  <!-- ============== Analysis Progress ============== -->
+  <div class="section pad" id="analysisSection" style="display: none;">
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progress-bar"><div class="progress-fill" id="analysisProgressFill"></div></div>
+      <div class="progress-text" id="analysisProgressText" aria-live="polite">Analyzing...</div>
     </div>
-
-    <div class="section" id="previewSection" style="display: none;">
-      <h2 data-i18n="folderStep2">2. Preview Structure</h2>
-      <div class="preview" id="preview" aria-live="polite"></div>
-      <div class="stats" id="stats" aria-live="polite"></div>
-    </div>
-
-    <div class="section">
-      <h2 data-i18n="folderStep3">3. Settings</h2>
-      <div class="settings">
-        <div class="setting-item">
-          <label for="imageWidth" data-i18n="imageWidth">Image Width (px)</label>
-          <input type="number" id="imageWidth" value="390" min="100" max="1920">
-        </div>
-        <div class="setting-item">
-          <label for="maxChunkHeight" data-i18n="maxChunkHeight">Max Chunk Height (px)</label>
-          <input type="number" id="maxChunkHeight" value="4096" min="1000" max="8192">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <button class="primary-btn" id="importBtn" disabled data-i18n="importBtn">Import to Figma</button>
-      <button class="cancel-btn" id="cancelFolderBtn" style="display:none"
-              onclick="cancelImport('folder')" data-i18n="cancelImport">Cancel Import</button>
-      <div class="progress" id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <div class="progress-text" id="progressText" aria-live="polite">Processing...</div>
-      </div>
-    </div>
+    <button class="cancel-btn" id="cancelAnalysisBtn" type="button"
+            onclick="cancelImport('analysis')" data-i18n="cancelAnalysis">Cancel Analysis</button>
   </div>
 
-  <!-- ============== Smart Import Mode ============== -->
-  <div id="smartMode" class="mode-content" role="tabpanel" aria-labelledby="tabSmart">
-    <div class="mode-desc" data-i18n="smartDesc">Just have a bunch of screenshots? Drop them all in — scroll sequences and app sections are detected automatically.</div>
-    <div class="section">
-      <h2 data-i18n="smartStep1">1. Select Screenshots</h2>
-      <div class="drop-zone" id="smartDropZone" role="button" tabindex="0"
-           aria-label="Select app screenshots">
-        <input type="file" id="smartFileInput" multiple accept="image/png,image/jpeg"
-               aria-label="Screenshot file picker">
-        <p class="drop-zone-text">
-          <strong data-i18n="clickSelectScreenshots">Click to select app screenshots</strong><br>
-          <span style="font-size: 11px; color: var(--text-tertiary);"
-                data-i18n="smartSortHint">Select all screenshots at once &mdash; sorted by filename automatically</span>
-        </p>
-      </div>
-      <div id="smartSkippedNotice" aria-live="polite"></div>
+  <!-- ============== Unified Preview ============== -->
+  <div class="section pad" id="previewSection" style="display: none;">
+    <h2 data-i18n="previewTitle">Preview</h2>
+
+    <div id="folderPreviewWrap" style="display: none;">
+      <div class="preview" id="folderPreviewContent" aria-live="polite"></div>
     </div>
 
-    <div class="section" id="smartAnalysisSection" style="display: none;">
-      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="progress-bar"><div class="progress-fill" id="analysisProgressFill"></div></div>
-        <div class="progress-text" id="analysisProgressText" aria-live="polite">Analyzing screenshots...</div>
-      </div>
-      <button class="cancel-btn" id="cancelAnalysisBtn"
-              onclick="cancelImport('analysis')" data-i18n="cancelAnalysis">Cancel Analysis</button>
-    </div>
-
-    <div class="section" id="smartPreviewSection" style="display: none;">
-      <h2 data-i18n="smartStep2">2. Preview &amp; Edit Sections</h2>
+    <div id="smartPreviewWrap" style="display: none;">
       <div class="analysis-info" id="analysisInfo" aria-live="polite"></div>
       <div class="smart-preview" id="smartPreview" aria-live="polite"></div>
-      <div class="stats" id="smartStats" aria-live="polite"></div>
-      <button class="re-analyze-btn" onclick="reAnalyze()" data-i18n="reAnalyze">Re-analyze with current settings</button>
+      <button class="re-analyze-btn" type="button" onclick="reAnalyze()"
+              data-i18n="reAnalyze">Re-analyze with current settings</button>
     </div>
 
-    <div class="section">
-      <h2 data-i18n="smartStep3">3. Settings</h2>
-      <div class="settings">
-        <div class="setting-item">
-          <label for="smartImageWidth" data-i18n="imageWidth">Image Width (px)</label>
-          <input type="number" id="smartImageWidth" value="390" min="100" max="1920">
-        </div>
-        <div class="setting-item">
-          <label for="smartMaxChunkHeight" data-i18n="maxChunkHeight">Max Chunk Height (px)</label>
-          <input type="number" id="smartMaxChunkHeight" value="4096" min="1000" max="8192">
-        </div>
-      </div>
-      <div class="settings" style="margin-top: 8px;">
-        <div class="setting-item">
-          <label for="scrollSensitivity" data-i18n="scrollSens">Scroll Sensitivity</label>
-          <input type="range" id="scrollSensitivity" min="0.50" max="0.99" step="0.01" value="0.85"
-                 oninput="document.getElementById('scrollSensLabel').textContent=this.value">
-          <span id="scrollSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.85</span>
-          <span class="setting-hint" data-i18n="scrollSensHint">Higher = stricter scroll matching</span>
-        </div>
-        <div class="setting-item">
-          <label for="sectionSensitivity" data-i18n="sectionSens">Section Sensitivity</label>
-          <input type="range" id="sectionSensitivity" min="0.30" max="0.95" step="0.01" value="0.70"
-                 oninput="document.getElementById('sectionSensLabel').textContent=this.value">
-          <span id="sectionSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.70</span>
-          <span class="setting-hint" data-i18n="sectionSensHint">Higher = more sections detected</span>
-        </div>
-      </div>
-      <div class="settings ai-settings" style="margin-top: 8px;">
-        <div class="setting-item" style="grid-column: 1 / -1;">
-          <label for="geminiApiKey" data-i18n="geminiApiKeyLabel">Gemini API Key <span class="optional-badge" data-i18n="optionalBadge">(optional)</span></label>
-          <div class="api-key-wrapper">
-            <input type="password" id="geminiApiKey" placeholder="AIza..."
-                   onchange="saveGeminiApiKey(this.value)" autocomplete="off">
-            <button class="api-key-toggle" onclick="toggleApiKeyVisibility()" aria-label="Toggle visibility"><svg class="eye-icon" viewBox="0 0 16 16" fill="none"><path d="M8 3C4.36 3 1.26 5.28.5 8c.76 2.72 3.86 5 7.5 5s6.74-2.28 7.5-5c-.76-2.72-3.86-5-7.5-5z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.2"/><line class="eye-slash" x1="2.5" y1="13.5" x2="13.5" y2="2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+    <div class="stats" id="stats" aria-live="polite"></div>
+  </div>
+
+  <!-- ============== Settings (collapsible) ============== -->
+  <div class="section pad">
+    <details class="settings-accordion" id="settingsAccordion">
+      <summary data-i18n="settingsTitle">Settings</summary>
+      <div class="settings-body">
+        <div class="settings">
+          <div class="setting-item">
+            <label for="imageWidth" data-i18n="imageWidth">Image Width (px)</label>
+            <input type="number" id="imageWidth" value="390" min="100" max="1920">
           </div>
-          <span class="setting-hint" data-i18n="geminiApiKeyHint">Free — AI suggests section names from screenshots. Without a key, names are inferred from filenames only.</span>
-          <a href="https://aistudio.google.com/apikey" target="_blank" class="setting-link" data-i18n="getApiKey">Get free API key →</a>
+          <div class="setting-item">
+            <label for="maxChunkHeight" data-i18n="maxChunkHeight">Max Chunk Height (px)</label>
+            <input type="number" id="maxChunkHeight" value="4096" min="1000" max="8192">
+          </div>
+        </div>
+        <div class="settings smart-only-settings" id="smartSettings" style="display: none;">
+          <div class="setting-item">
+            <label for="scrollSensitivity" data-i18n="scrollSens">Scroll Sensitivity</label>
+            <input type="range" id="scrollSensitivity" min="0.50" max="0.99" step="0.01" value="0.85"
+                   oninput="document.getElementById('scrollSensLabel').textContent=this.value">
+            <span id="scrollSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.85</span>
+            <span class="setting-hint" data-i18n="scrollSensHint">Higher = stricter scroll matching</span>
+          </div>
+          <div class="setting-item">
+            <label for="sectionSensitivity" data-i18n="sectionSens">Section Sensitivity</label>
+            <input type="range" id="sectionSensitivity" min="0.30" max="0.95" step="0.01" value="0.70"
+                   oninput="document.getElementById('sectionSensLabel').textContent=this.value">
+            <span id="sectionSensLabel" style="font-size: 10px; color: var(--text-tertiary);">0.70</span>
+            <span class="setting-hint" data-i18n="sectionSensHint">Higher = more sections detected</span>
+          </div>
         </div>
       </div>
-    </div>
+    </details>
+  </div>
 
-    <div class="section">
-      <button class="primary-btn" id="smartImportBtn" disabled data-i18n="importBtn">Import to Figma</button>
-      <button class="cancel-btn" id="cancelSmartBtn" style="display:none"
-              onclick="cancelImport('smart')" data-i18n="cancelImport">Cancel Import</button>
-      <div class="progress" id="smartProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="progress-bar"><div class="progress-fill" id="smartProgressFill"></div></div>
-        <div class="progress-text" id="smartProgressText" aria-live="polite">Processing...</div>
-      </div>
+  <!-- ============== Import ============== -->
+  <div class="section pad">
+    <button class="primary-btn" id="importBtn" disabled data-i18n="importBtn">Import to Figma</button>
+    <button class="cancel-btn" id="cancelImportBtn" style="display:none" type="button"
+            onclick="cancelCurrentImport()" data-i18n="cancelImport">Cancel Import</button>
+    <div class="progress" id="importProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progress-bar"><div class="progress-fill" id="importProgressFill"></div></div>
+      <div class="progress-text" id="importProgressText" aria-live="polite"></div>
     </div>
   </div>
 
   <!-- ============== Footer ============== -->
   <div class="footer">
     <a href="https://github.com/iori73/figma-screenshot-importer#usage-guide"
-       target="_blank" data-i18n="viewGuide">
-      View Usage Guide
-    </a>
+       target="_blank" data-i18n="viewGuide">View Usage Guide</a>
     <div class="lang-switcher" role="radiogroup" aria-label="Language">
       <button class="lang-option" id="langEn" data-lang="en" onclick="setLang('en')" role="radio" aria-checked="true">EN</button>
       <button class="lang-option" id="langJa" data-lang="ja" onclick="setLang('ja')" role="radio" aria-checked="false">JA</button>
     </div>
   </div>
 
-  <script>"use strict";(()=>{var K={en:{tabFolder:"Folder Import",tabSmart:"Smart Import",folderDesc:"Already organized your screenshots into folders? Import the folder structure directly as Figma Sections.",folderStep1:"1. Select Screenshot Folder",folderStep2:"2. Preview Structure",folderStep3:"3. Settings",smartStep1:"1. Select Screenshots",smartStep2:"2. Preview & Edit Sections",smartStep3:"3. Settings",smartDesc:"Just have a bunch of screenshots? Drop them all in \u2014 scroll sequences and app sections are detected automatically.",clickSelectFolder:"Click to select folder",clickSelectScreenshots:"Click to select app screenshots",smartSortHint:"Select all screenshots at once \u2014 sorted by filename automatically",orSelectFiles:"Or select individual image files:",imageWidth:"Image Width (px)",maxChunkHeight:"Max Chunk Height (px)",scrollSens:"Scroll Sensitivity",sectionSens:"Section Sensitivity",scrollSensHint:"Higher = stricter scroll matching",sectionSensHint:"Higher = more sections detected",importBtn:"Import to Figma",cancelImport:"Cancel Import",cancelAnalysis:"Cancel Analysis",reAnalyze:"Re-analyze with current settings",viewGuide:"View Usage Guide",processing:"Processing...",sendingToFigma:"Sending to Figma...",importComplete:"Import complete!",importCancelled:"Import cancelled.",cancelling:"Cancelling...",analysisComplete:"Analysis complete!",noValidImages:"No valid images found.",noImageFiles:"No image files selected",noImageInFolder:"No image files found in selected folder",folderParseError:"Could not parse folder structure. Please select the parent folder containing section folders.",loadingImage:"Loading image {n}/{total}...",detectingScroll:"Detecting scroll sequences... ({n}/{total})",detectingSection:"Detecting section breaks... ({n}/{total})",processingFile:"Processing: {name}",largeFileWarning:"You selected {count} images. Analysis may take a while. Continue?",skippedFiles:"{count} non-image file(s) skipped.",detectedSummary:"Detected <strong>{sections}</strong> sections, <strong>{scrollGroups}</strong> scroll groups from <strong>{total}</strong> screenshots.",loadErrorsSuffix:' <span style="color:var(--error-text);">{count} image(s) failed to load and were skipped.</span>',statsSummary:"<strong>{sections}</strong> sections, <strong>{scrollGroups}</strong> scroll groups, <strong>{screens}</strong> total screens",folderStats:"<strong>{sections}</strong> sections, <strong>{folders}</strong> auto layouts, <strong>{files}</strong> images",screens:"screens",screen:"screen",geminiApiKeyLabel:"Gemini API Key",optionalBadge:"(optional)",geminiApiKeyHint:"Free \u2014 AI suggests section names from screenshots. Without a key, names are inferred from filenames only.",getApiKey:"Get free API key \u2192",aiSuggesting:"AI suggesting section names...",aiSuggestDone:"AI suggested {count} section names",aiSuggestError:"AI suggestion failed \u2014 using filename hints",aiSuggestNoKey:""},ja:{tabFolder:"\u30D5\u30A9\u30EB\u30C0\u30A4\u30F3\u30DD\u30FC\u30C8",tabSmart:"\u30B9\u30DE\u30FC\u30C8\u30A4\u30F3\u30DD\u30FC\u30C8",folderDesc:"\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u3092\u30D5\u30A9\u30EB\u30C0\u3067\u6574\u7406\u6E08\u307F\uFF1F \u30D5\u30A9\u30EB\u30C0\u69CB\u9020\u3092\u305D\u306E\u307E\u307EFigma\u306E\u30BB\u30AF\u30B7\u30E7\u30F3\u3068\u3057\u3066\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u307E\u3059\u3002",folderStep1:"1. \u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E",folderStep2:"2. \u69CB\u9020\u3092\u30D7\u30EC\u30D3\u30E5\u30FC",folderStep3:"3. \u8A2D\u5B9A",smartStep1:"1. \u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u3092\u9078\u629E",smartStep2:"2. \u30BB\u30AF\u30B7\u30E7\u30F3\u306E\u30D7\u30EC\u30D3\u30E5\u30FC\u30FB\u7DE8\u96C6",smartStep3:"3. \u8A2D\u5B9A",smartDesc:"\u30B9\u30AF\u30B7\u30E7\u304C\u672A\u6574\u7406\u3067\u3082OK\u3002\u307E\u3068\u3081\u3066\u6295\u3052\u8FBC\u3081\u3070\u3001\u30B9\u30AF\u30ED\u30FC\u30EB\u9023\u7D50\u3084\u30BB\u30AF\u30B7\u30E7\u30F3\u3092\u81EA\u52D5\u3067\u691C\u51FA\u3057\u307E\u3059\u3002",clickSelectFolder:"\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E",clickSelectScreenshots:"\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u3092\u9078\u629E",smartSortHint:"\u3059\u3079\u3066\u306E\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u3092\u4E00\u5EA6\u306B\u9078\u629E \u2014 \u30D5\u30A1\u30A4\u30EB\u540D\u3067\u81EA\u52D5\u30BD\u30FC\u30C8",orSelectFiles:"\u307E\u305F\u306F\u500B\u5225\u306E\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E:",imageWidth:"\u753B\u50CF\u306E\u5E45 (px)",maxChunkHeight:"\u6700\u5927\u30C1\u30E3\u30F3\u30AF\u9AD8\u3055 (px)",scrollSens:"\u30B9\u30AF\u30ED\u30FC\u30EB\u611F\u5EA6",sectionSens:"\u30BB\u30AF\u30B7\u30E7\u30F3\u611F\u5EA6",scrollSensHint:"\u9AD8\u3044\u5024 = \u3088\u308A\u53B3\u5BC6\u306A\u30B9\u30AF\u30ED\u30FC\u30EB\u5224\u5B9A",sectionSensHint:"\u9AD8\u3044\u5024 = \u3088\u308A\u591A\u304F\u306E\u30BB\u30AF\u30B7\u30E7\u30F3\u3092\u691C\u51FA",importBtn:"Figma\u306B\u30A4\u30F3\u30DD\u30FC\u30C8",cancelImport:"\u30A4\u30F3\u30DD\u30FC\u30C8\u3092\u30AD\u30E3\u30F3\u30BB\u30EB",cancelAnalysis:"\u89E3\u6790\u3092\u30AD\u30E3\u30F3\u30BB\u30EB",reAnalyze:"\u73FE\u5728\u306E\u8A2D\u5B9A\u3067\u518D\u89E3\u6790",viewGuide:"\u4F7F\u3044\u65B9\u30AC\u30A4\u30C9",processing:"\u51E6\u7406\u4E2D...",sendingToFigma:"Figma\u306B\u9001\u4FE1\u4E2D...",importComplete:"\u30A4\u30F3\u30DD\u30FC\u30C8\u5B8C\u4E86\uFF01",importCancelled:"\u30A4\u30F3\u30DD\u30FC\u30C8\u304C\u30AD\u30E3\u30F3\u30BB\u30EB\u3055\u308C\u307E\u3057\u305F\u3002",cancelling:"\u30AD\u30E3\u30F3\u30BB\u30EB\u4E2D...",analysisComplete:"\u89E3\u6790\u5B8C\u4E86\uFF01",noValidImages:"\u6709\u52B9\u306A\u753B\u50CF\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002",noImageFiles:"\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u304C\u9078\u629E\u3055\u308C\u3066\u3044\u307E\u305B\u3093",noImageInFolder:"\u30D5\u30A9\u30EB\u30C0\u5185\u306B\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093",folderParseError:"\u30D5\u30A9\u30EB\u30C0\u69CB\u9020\u3092\u89E3\u6790\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u30BB\u30AF\u30B7\u30E7\u30F3\u30D5\u30A9\u30EB\u30C0\u3092\u542B\u3080\u89AA\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002",loadingImage:"\u753B\u50CF\u8AAD\u307F\u8FBC\u307F\u4E2D {n}/{total}...",detectingScroll:"\u30B9\u30AF\u30ED\u30FC\u30EB\u691C\u51FA\u4E2D... ({n}/{total})",detectingSection:"\u30BB\u30AF\u30B7\u30E7\u30F3\u533A\u5207\u308A\u691C\u51FA\u4E2D... ({n}/{total})",processingFile:"\u51E6\u7406\u4E2D: {name}",largeFileWarning:"{count}\u679A\u306E\u753B\u50CF\u3092\u9078\u629E\u3057\u307E\u3057\u305F\u3002\u89E3\u6790\u306B\u6642\u9593\u304C\u304B\u304B\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\u7D9A\u3051\u307E\u3059\u304B\uFF1F",skippedFiles:"{count}\u4EF6\u306E\u975E\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u3092\u30B9\u30AD\u30C3\u30D7\u3057\u307E\u3057\u305F\u3002",detectedSummary:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{scrollGroups}</strong>\u30B9\u30AF\u30ED\u30FC\u30EB\u30B0\u30EB\u30FC\u30D7\u3092<strong>{total}</strong>\u679A\u306E\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u304B\u3089\u691C\u51FA\u3002",loadErrorsSuffix:' <span style="color:var(--error-text);">{count}\u679A\u306E\u753B\u50CF\u304C\u8AAD\u307F\u8FBC\u3081\u305A\u30B9\u30AD\u30C3\u30D7\u3055\u308C\u307E\u3057\u305F\u3002</span>',statsSummary:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{scrollGroups}</strong>\u30B9\u30AF\u30ED\u30FC\u30EB\u30B0\u30EB\u30FC\u30D7\u3001<strong>{screens}</strong>\u753B\u9762",folderStats:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{folders}</strong>\u30AA\u30FC\u30C8\u30EC\u30A4\u30A2\u30A6\u30C8\u3001<strong>{files}</strong>\u753B\u50CF",screens:"\u753B\u9762",screen:"\u753B\u9762",geminiApiKeyLabel:"Gemini API\u30AD\u30FC",optionalBadge:"\uFF08\u4EFB\u610F\uFF09",geminiApiKeyHint:"\u7121\u6599 \u2014 AI\u304C\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u304B\u3089\u30BB\u30AF\u30B7\u30E7\u30F3\u540D\u3092\u63D0\u6848\u3002\u30AD\u30FC\u672A\u8A2D\u5B9A\u6642\u306F\u30D5\u30A1\u30A4\u30EB\u540D\u304B\u3089\u63A8\u5B9A\u306E\u307F\u3002",getApiKey:"\u7121\u6599API\u30AD\u30FC\u3092\u53D6\u5F97 \u2192",aiSuggesting:"AI\u304C\u30BB\u30AF\u30B7\u30E7\u30F3\u540D\u3092\u63D0\u6848\u4E2D...",aiSuggestDone:"AI\u304C{count}\u4EF6\u306E\u30BB\u30AF\u30B7\u30E7\u30F3\u540D\u3092\u63D0\u6848\u3057\u307E\u3057\u305F",aiSuggestError:"AI\u63D0\u6848\u306B\u5931\u6557 \u2014 \u30D5\u30A1\u30A4\u30EB\u540D\u304B\u3089\u63A8\u5B9A",aiSuggestNoKey:""}},A="en";try{A=localStorage.getItem("bsi-lang")||"en"}catch{}function h(e,n){let s=K[A]&&K[A][e]||K.en[e]||e;if(n)for(let[t,a]of Object.entries(n))s=s.split("{"+t+"}").join(String(a));return s}function z(e){A=e;try{localStorage.setItem("bsi-lang",A)}catch{}document.documentElement.lang=A,document.querySelectorAll(".lang-option").forEach(n=>{let s=n.dataset.lang===A;n.classList.toggle("active",s),n.setAttribute("aria-checked",String(s))}),document.querySelectorAll("[data-i18n]").forEach(n=>{let s=n.dataset.i18n,t=h(s);t.includes("<")?n.innerHTML=t:n.textContent=t})}function ue(){z(A==="en"?"ja":"en")}z(A);fe();function I(e){return String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function V(){try{return localStorage.getItem("bsi-gemini-key")||""}catch{return""}}function pe(e){try{localStorage.setItem("bsi-gemini-key",e.trim())}catch{}}function he(){let e=document.getElementById("geminiApiKey"),n=e.type==="password";e.type=n?"text":"password",e.parentElement?.querySelector(".api-key-toggle")?.classList.toggle("api-key-visible",n)}function fe(){let e=V(),n=document.getElementById("geminiApiKey");n&&e&&(n.value=e)}async function ye(e,n){let s=V();if(!s)return[];let t=[];t.push({text:'You are analyzing screenshots from a mobile app. For each numbered image below, provide a SHORT descriptive section label (1-3 words, e.g. "Home", "Login", "Settings", "Profile", "Search", "Registration", "Payment", "Map", "Booking", "Chat"). Reply with ONLY the labels, one per line, in the same order as the images. No numbering, no explanation.'});let a=0;for(let o=0;o<e.length;o++){let r=e[o].groups[0]?.screens[0];if(r==null||!n[r])continue;let i=n[r],m=i.replace(/^data:image\/\w+;base64,/,""),u=i.match(/^data:(image\/\w+);/),p=u?u[1]:"image/png";t.push({text:`Image ${o+1}:`}),t.push({inlineData:{mimeType:p,data:m}}),a++}if(a===0)return[];let d=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${s}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:t}]})});if(!d.ok){let o=await d.text().catch(()=>"");throw new Error(`Gemini API error ${d.status}: ${o.slice(0,200)}`)}return((await d.json())?.candidates?.[0]?.content?.parts?.[0]?.text||"").split(`
-`).map(o=>o.trim()).filter(o=>o.length>0&&o.length<40)}var x="folder",E=["folder","smart"];function se(e){x=e,E.forEach(n=>{let s=document.getElementById("tab"+n.charAt(0).toUpperCase()+n.slice(1)),t=document.getElementById(n+"Mode"),a=n===e;s.setAttribute("aria-selected",String(a)),s.tabIndex=a?0:-1,t.classList.toggle("active",a)})}document.querySelector(".mode-tabs").addEventListener("keydown",e=>{let n=E.indexOf(x),s=n;if(e.key==="ArrowRight"||e.key==="ArrowDown")s=(n+1)%E.length;else if(e.key==="ArrowLeft"||e.key==="ArrowUp")s=(n-1+E.length)%E.length;else if(e.key==="Home")s=0;else if(e.key==="End")s=E.length-1;else return;e.preventDefault(),se(E[s]),document.getElementById("tab"+E[s].charAt(0).toUpperCase()+E[s].slice(1)).focus()});var S={folder:!1,smart:!1,analysis:!1};function be(e){S[e]=!0,e==="analysis"&&(document.getElementById("cancelAnalysisBtn").disabled=!0,document.getElementById("analysisProgressText").textContent=h("cancelling"))}function X(e){S[e]=!1}function Y(){let e=x==="smart"?"smartImageWidth":"imageWidth";return parseInt(document.getElementById(e).value)||360}function re(){let e=x==="smart"?"smartMaxChunkHeight":"maxChunkHeight";return parseInt(document.getElementById(e).value)||4096}async function ae(e){return new Promise((n,s)=>{let t=new Image,a=URL.createObjectURL(e);t.onerror=()=>{URL.revokeObjectURL(a),s(new Error(`Failed to load image: ${e.name}`))},t.onload=()=>{URL.revokeObjectURL(a);let d=Y(),g=re(),l=t.width,c=t.height,o=d/l,r=Math.round(c*o),i=[],m=Math.ceil(c/g);for(let u=0;u<m;u++){let p=document.createElement("canvas"),f=p.getContext("2d"),b=u*g,w=Math.min(g,c-b);p.width=l,p.height=w,f.drawImage(t,0,b,l,w,0,0,l,w),i.push({originalWidth:l,originalHeight:w,displayWidth:d,displayHeight:Math.round(w*o),data:p.toDataURL("image/png")})}n({chunks:i,displayWidth:d,displayHeight:r})},t.src=a})}var _=[],T={},oe=document.getElementById("dropZone"),Z=document.getElementById("folderInput"),we=document.getElementById("fileInput"),ie=document.getElementById("previewSection"),Se=document.getElementById("preview"),ke=document.getElementById("stats"),B=document.getElementById("importBtn"),Q=document.getElementById("cancelFolderBtn"),G=document.getElementById("progress"),O=document.getElementById("progressFill"),$=document.getElementById("progressText");oe.addEventListener("click",e=>{e.stopPropagation(),Z.click()});oe.addEventListener("keydown",e=>{(e.key==="Enter"||e.key===" ")&&(e.preventDefault(),Z.click())});Z.addEventListener("change",e=>Ee(e.target.files));we.addEventListener("change",e=>ve(e.target.files));B.addEventListener("click",Ae);function ve(e){let n=Array.from(e).filter(s=>{let t=s.name.toLowerCase();return!t.startsWith(".")&&(t.endsWith(".png")||t.endsWith(".jpg")||t.endsWith(".jpeg"))});if(n.length===0){alert(h("noImageFiles"));return}T={"imported-images":{_files:n.map(s=>({name:s.name,file:s}))}},le(),ie.style.display="block",B.removeAttribute("disabled")}function Ee(e){if(_=Array.from(e).filter(n=>{let s=n.name.toLowerCase();return!s.startsWith(".")&&(s.endsWith(".png")||s.endsWith(".jpg")||s.endsWith(".jpeg"))}),_.length===0){alert(h("noImageInFolder"));return}if(T=Ie(_),Object.keys(T).length===0){alert(h("folderParseError"));return}le(),ie.style.display="block",B.removeAttribute("disabled")}function Ie(e){let n={};return e.forEach(s=>{let t=s.webkitRelativePath.split("/"),a=t[t.length-1],d,g;if(t.length>=3)d=t[1],g=t.slice(2,-1);else if(t.length===2)d=t[0],g=[];else return;n[d]||(n[d]={});let l=n[d];g.length===0?(l._files||(l._files=[]),l._files.push({name:a,file:s})):(g.forEach(c=>{l[c]||(l[c]={}),l=l[c]}),l._files||(l._files=[]),l._files.push({name:a,file:s}))}),n}function le(){let e="",n=0,s=0,t=0;function a(d,g=0,l=!1){let c="";for(let[o,r]of Object.entries(d))o==="_files"?r.forEach(i=>{c+=`<div class="preview-item preview-file" style="padding-left: ${g+12}px">\u{1F4C4} ${I(i.name)}</div>`,n++}):(l?(c+=`<div class="preview-item preview-section">\u{1F4C1} [Section] ${I(o)}</div>`,s++):(c+=`<div class="preview-item preview-folder" style="padding-left: ${g}px">\u{1F4C2} [AutoLayout] ${I(o)}</div>`,t++),c+=a(r,g+12,!1));return c}e=a(T,0,!0),Se.innerHTML=e,ke.innerHTML=h("folderStats",{sections:s,folders:t,files:n})}async function Ae(){B.setAttribute("disabled",""),Q.style.display="block",G.style.display="block",X("folder");let e={structure:{},settings:{imageWidth:Y(),maxChunkHeight:re()}},n=0,s=0,t=0;function a(g){for(let[l,c]of Object.entries(g))l==="_files"?n+=c.length:a(c)}a(T);async function d(g,l){for(let[c,o]of Object.entries(g)){if(S.folder)return;if(c==="_files"){l._files=[];for(let r of o){if(S.folder)return;$.textContent=h("processingFile",{name:r.name});try{let m=await ae(r.file);l._files.push({name:r.name,chunks:m.chunks,displayWidth:m.displayWidth,displayHeight:m.displayHeight})}catch(m){console.warn("Skipping failed image:",r.name,m),t++}s++;let i=s/n*100;O.style.width=`${i}%`,G.setAttribute("aria-valuenow",String(Math.round(i)))}}else l[c]={},await d(o,l[c])}}if(await d(T,e.structure),Q.style.display="none",S.folder){$.textContent=h("importCancelled"),O.style.width="0%",setTimeout(()=>{G.style.display="none",B.removeAttribute("disabled")},1500);return}$.textContent=h("sendingToFigma"),parent.postMessage({pluginMessage:{type:"import",data:e,skippedFiles:t}},"*")}var W=120,Fe=200,y=[],v=[],D=[],k=[],C=document.getElementById("smartDropZone"),J=document.getElementById("smartFileInput"),xe=document.getElementById("smartSkippedNotice"),L=document.getElementById("smartAnalysisSection"),M=document.getElementById("analysisProgressFill"),F=document.getElementById("analysisProgressText"),ee=document.getElementById("smartPreviewSection"),Ce=document.getElementById("analysisInfo"),He=document.getElementById("smartPreview"),Le=document.getElementById("smartStats"),P=document.getElementById("smartImportBtn"),te=document.getElementById("cancelSmartBtn"),U=document.getElementById("smartProgress"),q=document.getElementById("smartProgressFill"),N=document.getElementById("smartProgressText");C.addEventListener("click",e=>{e.stopPropagation(),J.click()});C.addEventListener("keydown",e=>{(e.key==="Enter"||e.key===" ")&&(e.preventDefault(),J.click())});C.addEventListener("dragover",e=>{e.preventDefault(),C.classList.add("drag-over")});C.addEventListener("dragleave",()=>{C.classList.remove("drag-over")});C.addEventListener("drop",e=>{e.preventDefault(),C.classList.remove("drag-over"),e.dataTransfer.files.length>0&&ce(e.dataTransfer.files)});J.addEventListener("change",e=>ce(e.target.files));P.addEventListener("click",Ne);function ce(e){let n=Array.from(e),s=n.filter(a=>{let d=a.name.toLowerCase();return!d.startsWith(".")&&(d.endsWith(".png")||d.endsWith(".jpg")||d.endsWith(".jpeg"))}),t=n.length-s.length;if(xe.innerHTML=t>0?`<div class="skipped-notice">${I(h("skippedFiles",{count:t}))}</div>`:"",s.length===0){alert(h("noImageFiles"));return}y=s.sort((a,d)=>a.name.localeCompare(d.name,void 0,{numeric:!0,sensitivity:"base"})),!(y.length>Fe&&!confirm(h("largeFileWarning",{count:y.length})))&&de()}function Me(e){return new Promise((n,s)=>{let t=new Image,a=URL.createObjectURL(e);t.onerror=()=>{URL.revokeObjectURL(a),s(new Error(`Failed to load: ${e.name}`))},t.onload=()=>{let d=W/t.width,g=Math.round(t.height*d),l=document.createElement("canvas");l.width=W,l.height=g,l.getContext("2d").drawImage(t,0,0,W,g);let c=l.getContext("2d").getImageData(0,0,W,g),o=document.createElement("canvas"),r=48,i=Math.round(t.height*(r/t.width));o.width=r,o.height=i,o.getContext("2d").drawImage(t,0,0,r,i),URL.revokeObjectURL(a),n({width:W,height:g,data:c.data,thumbDataUrl:o.toDataURL("image/jpeg",.6)})},t.src=a})}function Te(e,n,s,t){let a=0,d=0,g=0,l=0;for(let u=0;u<t;u+=2)for(let p=0;p<n;p+=2){let f=((s+u)*n+p)*4;a+=e[f],d+=e[f+1],g+=e[f+2],l++}let c=a/l,o=d/l,r=g/l,i=0;for(let u=0;u<t;u+=2)for(let p=0;p<n;p+=2){let f=((s+u)*n+p)*4;i+=(e[f]-c)**2+(e[f+1]-o)**2+(e[f+2]-r)**2}return i/(l*3)>=80}function Be(e,n,s){let t=e.width,a=e.height,d=n.height;if(a<20||d<20)return!1;let g=Math.max(4,Math.floor(a*.12)),l=Math.max(2,Math.floor(d*.06)),c=Math.min(30,Math.floor(a*.15));if(c<5)return!1;let o=Math.max(0,a-g-c);if(!Te(e.data,t,o,c))return!1;let r=Math.min(d,Math.floor(d*.65)),i=0;for(let m=l;m<=r-c;m+=2){let u=0,p=0;for(let b=0;b<c;b++)for(let w=0;w<t;w++){let H=((o+b)*t+w)*4,j=((m+b)*t+w)*4;u+=(Math.abs(e.data[H]-n.data[j])+Math.abs(e.data[H+1]-n.data[j+1])+Math.abs(e.data[H+2]-n.data[j+2]))/765,p++}let f=1-u/p;if(f>i&&(i=f),i>s+.03)break}return i>=s}function Pe(e,n,s){let t=e.width,a=e.height,d=n.height;if(a<10||d<10)return!0;let g=Math.max(4,Math.floor(Math.min(a,d)*.13)),l=0,c=0;for(let u=0;u<g;u++)for(let p=0;p<t;p++){let f=((a-g+u)*t+p)*4,b=((d-g+u)*t+p)*4;l+=(Math.abs(e.data[f]-n.data[b])+Math.abs(e.data[f+1]-n.data[b+1])+Math.abs(e.data[f+2]-n.data[b+2]))/765,c++}let o=1-l/c,r=0,i=0;for(let u=0;u<10;u++){let p=Math.floor(a*(u+1)/11),f=Math.floor(d*(u+1)/11);for(let b=0;b<t;b+=2){let w=(p*t+b)*4,H=(f*t+b)*4;r+=(Math.abs(e.data[w]-n.data[H])+Math.abs(e.data[w+1]-n.data[H+1])+Math.abs(e.data[w+2]-n.data[H+2]))/765,i++}}let m=1-r/i;return o<s||m<Math.max(.3,s-.25)}async function de(){L.style.display="block",ee.style.display="none",P.setAttribute("disabled",""),L.querySelector(".progress").style.display="block",document.getElementById("cancelAnalysisBtn").disabled=!1,X("analysis");let e=parseFloat(document.getElementById("scrollSensitivity").value),n=parseFloat(document.getElementById("sectionSensitivity").value);v=[],D=[];let s=0;for(let r=0;r<y.length;r++){if(S.analysis){R();return}F.textContent=h("loadingImage",{n:r+1,total:y.length});let i=(r+1)/y.length*50;M.style.width=`${i}%`,L.querySelector("[role=progressbar]")?.setAttribute("aria-valuenow",String(Math.round(i)));try{let m=await Me(y[r]);v.push(m),D.push(m.thumbDataUrl)}catch(m){console.warn("Skipping failed image:",y[r].name,m),v.push(null),D.push(""),s++}}if(S.analysis){R();return}let t=[];for(let r=0;r<v.length;r++)v[r]!==null&&t.push(r);if(t.length===0){F.textContent=h("noValidImages"),setTimeout(()=>{L.style.display="none"},2e3);return}let a=t.length-1,d=new Map;for(let r=0;r<a;r++){if(S.analysis){R();return}let i=t[r],m=t[r+1],u=50+r/a*25;F.textContent=h("detectingScroll",{n:r+1,total:a}),M.style.width=`${u}%`,d.set(`${i}-${m}`,Be(v[i],v[m],e)),r%5===0&&await new Promise(p=>setTimeout(p,0))}if(S.analysis){R();return}let g=[],l={screens:[t[0]],isScrollGroup:!1};for(let r=0;r<a;r++){let i=t[r],m=t[r+1];d.get(`${i}-${m}`)?(l.screens.push(m),l.isScrollGroup=l.screens.length>1):(g.push(l),l={screens:[m],isScrollGroup:!1})}g.push(l);let c=[0];for(let r=1;r<g.length;r++){if(S.analysis){R();return}let i=75+r/g.length*20;F.textContent=h("detectingSection",{n:r,total:g.length}),M.style.width=`${i}%`;let m=g[r-1].screens[0],u=g[r].screens[0];v[m]&&v[u]&&Pe(v[m],v[u],n)&&c.push(r),r%5===0&&await new Promise(p=>setTimeout(p,0))}k=[];let o=new Set;for(let r=0;r<c.length;r++){let i=c[r],m=r+1<c.length?c[r+1]:g.length,u=g.slice(i,m),p=De({groups:u},o);p&&o.add(p),k.push({name:"",suggestedName:p||`Section ${r+1}`,groups:u})}if(M.style.width="95%",F.textContent=h("analysisComplete"),V()){F.textContent=h("aiSuggesting");try{let r=await ye(k,D),i=0;for(let m=0;m<Math.min(r.length,k.length);m++)r[m]&&(k[m].suggestedName=r[m],i++);i>0&&(F.textContent=h("aiSuggestDone",{count:i}))}catch(r){console.warn("AI section suggestion failed:",r),F.textContent=h("aiSuggestError")}}M.style.width="100%",setTimeout(()=>{L.style.display="none",Ge(s),ee.style.display="block",P.removeAttribute("disabled")},500)}function R(){L.querySelector(".progress").style.display="none",L.style.display="none",M.style.width="0%"}function We(){y.length!==0&&de()}var Re=[{label:"Splash",keywords:["splash","launch","intro","welcome","tutorial"]},{label:"App Store",keywords:["appstore","app_store","app-store","store","download","install"]},{label:"Login",keywords:["login","signin","sign_in","sign-in","log-in","log_in"]},{label:"Registration",keywords:["register","signup","sign_up","sign-up","onboarding","create_account"]},{label:"Home",keywords:["home","top","main","feed","timeline","dashboard"]},{label:"Search",keywords:["search","explore","discover","find","browse"]},{label:"Map",keywords:["map","location","gps","navigate","navigation","ride","trip"]},{label:"Booking",keywords:["booking","book","reserve","reservation","schedule"]},{label:"Chat",keywords:["chat","message","dm","inbox","conversation","msg"]},{label:"Notifications",keywords:["notification","alert","notice","notif"]},{label:"Profile",keywords:["profile","account","mypage","my_page","my-page","user"]},{label:"Settings",keywords:["settings","setting","config","preference","pref"]},{label:"Payment",keywords:["payment","pay","checkout","cart","billing","wallet"]},{label:"Detail",keywords:["detail","item","product","article","post","single"]},{label:"List",keywords:["list","catalog","gallery","collection"]},{label:"Menu",keywords:["menu","nav","sidebar","drawer","hamburger"]},{label:"Camera",keywords:["camera","photo","capture","scan","qr"]},{label:"History",keywords:["history","log","activity","recent","order"]},{label:"Favorites",keywords:["favorite","fav","saved","bookmark","like","wishlist"]},{label:"Help",keywords:["help","support","faq","contact","about"]}];function De(e,n){let s=[];if(e.groups.forEach(c=>c.screens.forEach(o=>{y[o]&&s.push(y[o].name.toLowerCase().replace(/\.[^.]+$/,""))})),s.length===0)return"";let t=[];for(let c of Re){let o=0;for(let r of s)for(let i of c.keywords)if(r.includes(i)){o++;break}o>0&&t.push({label:c.label,score:o})}t.sort((c,o)=>o.score-c.score);for(let c of t)if(!n.has(c.label))return c.label;let a=new Map,d=new Set(["img","image","screenshot","screen","photo","pic","capture","shot","iphone","android","pixel","samsung","simulator","png","jpg","jpeg","at","am","pm"]);for(let c of s){let o=c.split(/[\s_\-./\\()[\]{}]+/).filter(i=>i.length>=3&&!/^\d+$/.test(i)&&!d.has(i)),r=new Set;for(let i of o)r.has(i)||(a.set(i,(a.get(i)||0)+1),r.add(i))}let g="",l=1;for(let[c,o]of a)o>l&&!n.has(ne(c))&&(g=c,l=o);return g?ne(g):""}function ne(e){return e.charAt(0).toUpperCase()+e.slice(1)}function Ge(e){let n=0,s=0,t="";k.forEach((d,g)=>{let l=0;d.groups.forEach(o=>{l+=o.screens.length,o.isScrollGroup&&s++}),n+=l;let c=l>1?h("screens"):h("screen");t+='<div class="smart-section">',t+='<div class="smart-section-header">',t+='<span class="section-badge">Section</span>',t+='<div class="section-name-wrapper">',t+=`<input type="text" class="section-name-input" value="${I(d.name)}" placeholder="${I(d.suggestedName)}" data-section-idx="${g}" onchange="updateSectionName(${g}, this.value)" onfocus="showAcceptHint(this)" onblur="hideAcceptHint(this)" onkeydown="handleSectionNameKey(event, ${g})" aria-label="Section name">`,t+='<span class="section-accept-hint" aria-hidden="true">Tab \u21B5</span>',t+="</div>",t+=`<span class="smart-section-count">${l} ${I(c)}</span>`,t+="</div>",t+='<div class="smart-section-thumbs">',d.groups.forEach(o=>{let r=o.isScrollGroup?"smart-group-wrapper scroll-group":"smart-group-wrapper";t+=`<div class="${r}">`,o.screens.forEach(i=>{let m=D[i]||"",u=y[i]?y[i].name:"";m&&(t+=`<img src="${m}" class="smart-thumb" title="${I(u)}" alt="${I(u)}">`)}),t+="</div>"}),t+="</div></div>"}),He.innerHTML=t;let a=h("detectedSummary",{sections:k.length,scrollGroups:s,total:y.length});e>0&&(a+=h("loadErrorsSuffix",{count:e})),Ce.innerHTML=a,Le.innerHTML=h("statsSummary",{sections:k.length,scrollGroups:s,screens:n})}function ge(e,n){e>=0&&e<k.length&&(k[e].name=n)}function $e(e,n){let s=e.target;(e.key==="Tab"||e.key==="Enter")&&!s.value&&s.placeholder&&(e.preventDefault(),s.value=s.placeholder,ge(n,s.placeholder),me(s),s.blur())}function Ue(e){if(!e.value&&e.placeholder){let n=e.parentElement?.querySelector(".section-accept-hint");n&&(n.style.opacity="1")}}function me(e){let n=e.parentElement?.querySelector(".section-accept-hint");n&&(n.style.opacity="0")}async function Ne(){P.setAttribute("disabled",""),te.style.display="block",U.style.display="block",X("smart");let e=[],n=0,s=0;k.forEach(a=>a.groups.forEach(d=>n+=d.screens.length));let t=0;for(let a of k){if(S.smart)break;let d=[];for(let l of a.groups){if(S.smart)break;let c=[];for(let o of l.screens){if(S.smart)break;N.textContent=h("processingFile",{name:y[o].name});try{let i=await ae(y[o]);c.push({name:y[o].name,chunks:i.chunks,displayWidth:i.displayWidth,displayHeight:i.displayHeight})}catch(i){console.warn("Skipping failed image:",y[o].name,i),s++}t++;let r=t/n*100;q.style.width=`${r}%`,U.setAttribute("aria-valuenow",String(Math.round(r)))}d.push({screens:c,isScrollGroup:l.isScrollGroup})}let g=a.name||a.suggestedName||`Section ${k.indexOf(a)+1}`;e.push({name:g,groups:d})}if(te.style.display="none",S.smart){N.textContent=h("importCancelled"),q.style.width="0%",setTimeout(()=>{U.style.display="none",P.removeAttribute("disabled")},1500);return}N.textContent=h("sendingToFigma"),parent.postMessage({pluginMessage:{type:"smart-import",data:{sections:e,settings:{imageWidth:Y(),sectionGap:100,groupGap:8,scrollGap:0}},skippedFiles:s}},"*")}window.onmessage=e=>{let n=e.data.pluginMessage;if(!n)return;let s=x==="smart"?q:O,t=x==="smart"?N:$,a=x==="smart"?U:G,d=x==="smart"?P:B;n.type==="progress"?(t.textContent=n.text,n.percent!==void 0&&(s.style.width=`${n.percent}%`)):n.type==="complete"?(t.textContent=h("importComplete"),s.style.width="100%",setTimeout(()=>{a.style.display="none",d.removeAttribute("disabled")},2e3)):n.type==="error"&&(t.textContent=`Error: ${n.text}`,d.removeAttribute("disabled"))};window.switchMode=se;window.cancelImport=be;window.reAnalyze=We;window.toggleLang=ue;window.setLang=z;window.updateSectionName=ge;window.handleSectionNameKey=$e;window.showAcceptHint=Ue;window.hideAcceptHint=me;window.saveGeminiApiKey=pe;window.toggleApiKeyVisibility=he;})();
+  <script>"use strict";(()=>{var z={en:{clickSelectFolder:"Click to select folder",dropHint:"or drop image files here (not folders)",chooseFiles:"Choose individual files",orDivider:"or",previewTitle:"Preview",settingsTitle:"Settings",imageWidth:"Image Width (px)",maxChunkHeight:"Max Chunk Height (px)",scrollSens:"Scroll Sensitivity",sectionSens:"Section Sensitivity",scrollSensHint:"Higher = stricter scroll matching",sectionSensHint:"Higher = more sections detected",importBtn:"Import to Figma",cancelImport:"Cancel Import",cancelAnalysis:"Cancel Analysis",reAnalyze:"Re-analyze with current settings",viewGuide:"View Usage Guide",processing:"Processing...",sendingToFigma:"Sending to Figma...",importComplete:"Import complete!",importCancelled:"Import cancelled.",cancelling:"Cancelling...",analysisComplete:"Analysis complete!",noValidImages:"No valid images found.",noImageFiles:"No image files selected",noImageInFolder:"No image files found in selected folder",folderDropNotSupported:`Folder drop is not supported in Figma plugins.
+Please use "Click to select folder" above, or drop individual image files instead.`,folderParseError:"Could not parse folder structure. Please select the parent folder containing section folders.",loadingImage:"Loading image {n}/{total}...",detectingScroll:"Detecting scroll sequences... ({n}/{total})",detectingSection:"Detecting section breaks... ({n}/{total})",processingFile:"Processing: {name}",largeFileWarning:"You selected {count} images. Analysis may take a while. Continue?",skippedFiles:"{count} non-image file(s) skipped.",detectedSummary:"Detected <strong>{sections}</strong> sections, <strong>{scrollGroups}</strong> scroll groups from <strong>{total}</strong> screenshots.",loadErrorsSuffix:' <span style="color:var(--error-text);">{count} image(s) failed to load and were skipped.</span>',statsSummary:"<strong>{sections}</strong> sections, <strong>{scrollGroups}</strong> scroll groups, <strong>{screens}</strong> total screens",folderStats:"<strong>{sections}</strong> sections, <strong>{folders}</strong> auto layouts, <strong>{files}</strong> images",screens:"screens",screen:"screen",sectionNamePlaceholder:"e.g. product-photos",filesReady:"{count} images ready",addMoreFolders:"Click to add more folders",clearAll:"Clear all",changeSelection:"Click to change selection"},ja:{clickSelectFolder:"\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E",dropHint:"\u307E\u305F\u306F\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u3092\u3053\u3053\u306B\u30C9\u30ED\u30C3\u30D7\uFF08\u30D5\u30A9\u30EB\u30C0\u4E0D\u53EF\uFF09",chooseFiles:"\u500B\u5225\u306E\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E",orDivider:"\u307E\u305F\u306F",previewTitle:"\u30D7\u30EC\u30D3\u30E5\u30FC",settingsTitle:"\u8A2D\u5B9A",imageWidth:"\u753B\u50CF\u306E\u5E45 (px)",maxChunkHeight:"\u6700\u5927\u30C1\u30E3\u30F3\u30AF\u9AD8\u3055 (px)",scrollSens:"\u30B9\u30AF\u30ED\u30FC\u30EB\u611F\u5EA6",sectionSens:"\u30BB\u30AF\u30B7\u30E7\u30F3\u611F\u5EA6",scrollSensHint:"\u9AD8\u3044\u5024 = \u3088\u308A\u53B3\u5BC6\u306A\u30B9\u30AF\u30ED\u30FC\u30EB\u5224\u5B9A",sectionSensHint:"\u9AD8\u3044\u5024 = \u3088\u308A\u591A\u304F\u306E\u30BB\u30AF\u30B7\u30E7\u30F3\u3092\u691C\u51FA",importBtn:"Figma\u306B\u30A4\u30F3\u30DD\u30FC\u30C8",cancelImport:"\u30A4\u30F3\u30DD\u30FC\u30C8\u3092\u30AD\u30E3\u30F3\u30BB\u30EB",cancelAnalysis:"\u89E3\u6790\u3092\u30AD\u30E3\u30F3\u30BB\u30EB",reAnalyze:"\u73FE\u5728\u306E\u8A2D\u5B9A\u3067\u518D\u89E3\u6790",viewGuide:"\u4F7F\u3044\u65B9\u30AC\u30A4\u30C9",processing:"\u51E6\u7406\u4E2D...",sendingToFigma:"Figma\u306B\u9001\u4FE1\u4E2D...",importComplete:"\u30A4\u30F3\u30DD\u30FC\u30C8\u5B8C\u4E86\uFF01",importCancelled:"\u30A4\u30F3\u30DD\u30FC\u30C8\u304C\u30AD\u30E3\u30F3\u30BB\u30EB\u3055\u308C\u307E\u3057\u305F\u3002",cancelling:"\u30AD\u30E3\u30F3\u30BB\u30EB\u4E2D...",analysisComplete:"\u89E3\u6790\u5B8C\u4E86\uFF01",noValidImages:"\u6709\u52B9\u306A\u753B\u50CF\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002",noImageFiles:"\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u304C\u9078\u629E\u3055\u308C\u3066\u3044\u307E\u305B\u3093",noImageInFolder:"\u30D5\u30A9\u30EB\u30C0\u5185\u306B\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093",folderDropNotSupported:`Figma\u30D7\u30E9\u30B0\u30A4\u30F3\u3067\u306F\u30D5\u30A9\u30EB\u30C0\u306E\u30C9\u30ED\u30C3\u30D7\u306B\u5BFE\u5FDC\u3057\u3066\u3044\u307E\u305B\u3093\u3002
+\u4E0A\u306E\u300C\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E\u300D\u3092\u4F7F\u3046\u304B\u3001\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u3092\u76F4\u63A5\u30C9\u30ED\u30C3\u30D7\u3057\u3066\u304F\u3060\u3055\u3044\u3002`,folderParseError:"\u30D5\u30A9\u30EB\u30C0\u69CB\u9020\u3092\u89E3\u6790\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u30BB\u30AF\u30B7\u30E7\u30F3\u30D5\u30A9\u30EB\u30C0\u3092\u542B\u3080\u89AA\u30D5\u30A9\u30EB\u30C0\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002",loadingImage:"\u753B\u50CF\u8AAD\u307F\u8FBC\u307F\u4E2D {n}/{total}...",detectingScroll:"\u30B9\u30AF\u30ED\u30FC\u30EB\u691C\u51FA\u4E2D... ({n}/{total})",detectingSection:"\u30BB\u30AF\u30B7\u30E7\u30F3\u533A\u5207\u308A\u691C\u51FA\u4E2D... ({n}/{total})",processingFile:"\u51E6\u7406\u4E2D: {name}",largeFileWarning:"{count}\u679A\u306E\u753B\u50CF\u3092\u9078\u629E\u3057\u307E\u3057\u305F\u3002\u89E3\u6790\u306B\u6642\u9593\u304C\u304B\u304B\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\u7D9A\u3051\u307E\u3059\u304B\uFF1F",skippedFiles:"{count}\u4EF6\u306E\u975E\u753B\u50CF\u30D5\u30A1\u30A4\u30EB\u3092\u30B9\u30AD\u30C3\u30D7\u3057\u307E\u3057\u305F\u3002",detectedSummary:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{scrollGroups}</strong>\u30B9\u30AF\u30ED\u30FC\u30EB\u30B0\u30EB\u30FC\u30D7\u3092<strong>{total}</strong>\u679A\u306E\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u304B\u3089\u691C\u51FA\u3002",loadErrorsSuffix:' <span style="color:var(--error-text);">{count}\u679A\u306E\u753B\u50CF\u304C\u8AAD\u307F\u8FBC\u3081\u305A\u30B9\u30AD\u30C3\u30D7\u3055\u308C\u307E\u3057\u305F\u3002</span>',statsSummary:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{scrollGroups}</strong>\u30B9\u30AF\u30ED\u30FC\u30EB\u30B0\u30EB\u30FC\u30D7\u3001<strong>{screens}</strong>\u753B\u9762",folderStats:"<strong>{sections}</strong>\u30BB\u30AF\u30B7\u30E7\u30F3\u3001<strong>{folders}</strong>\u30AA\u30FC\u30C8\u30EC\u30A4\u30A2\u30A6\u30C8\u3001<strong>{files}</strong>\u753B\u50CF",screens:"\u753B\u9762",screen:"\u753B\u9762",sectionNamePlaceholder:"\u4F8B: \u5546\u54C1\u5199\u771F",filesReady:"{count}\u679A\u306E\u753B\u50CF\u3092\u8AAD\u307F\u8FBC\u307F\u6E08\u307F",addMoreFolders:"\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A9\u30EB\u30C0\u3092\u8FFD\u52A0",clearAll:"\u3059\u3079\u3066\u30AF\u30EA\u30A2",changeSelection:"\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u9078\u629E\u3092\u5909\u66F4"}},A="en";try{A=localStorage.getItem("bsi-lang")||"en"}catch{}function f(e,t){let r=z[A]&&z[A][e]||z.en[e]||e;if(t)for(let[n,o]of Object.entries(t))r=r.split("{"+n+"}").join(String(o));return r}function te(e){A=e;try{localStorage.setItem("bsi-lang",A)}catch{}document.documentElement.lang=A,document.querySelectorAll(".lang-option").forEach(t=>{let r=t.dataset.lang===A;t.classList.toggle("active",r),t.setAttribute("aria-checked",String(r))}),document.querySelectorAll("[data-i18n]").forEach(t=>{let r=t.dataset.i18n,n=f(r);n.includes("<")?t.innerHTML=n:t.textContent=n})}te(A);function w(e){return String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}var S={folder:!1,smart:!1,analysis:!1};function ne(e){S[e]=!0,e==="analysis"&&(document.getElementById("cancelAnalysisBtn").disabled=!0,document.getElementById("analysisProgressText").textContent=f("cancelling"))}function Y(e){S[e]=!1}var U="folder";function K(e){document.querySelectorAll(".smart-only-settings").forEach(t=>{t.style.display=e?"":"none"})}function J(){return parseInt(document.getElementById("imageWidth").value)||360}function se(){return parseInt(document.getElementById("maxChunkHeight").value)||4096}async function re(e){return new Promise((t,r)=>{let n=new Image,o=URL.createObjectURL(e);n.onerror=()=>{URL.revokeObjectURL(o),r(new Error(`Failed to load image: ${e.name}`))},n.onload=()=>{URL.revokeObjectURL(o);let l=J(),c=se(),a=n.width,i=n.height,u=l/a,s=Math.round(i*u),d=[],g=Math.ceil(i/c);for(let m=0;m<g;m++){let p=document.createElement("canvas"),y=p.getContext("2d"),b=m*c,k=Math.min(c,i-b);p.width=a,p.height=k,y.drawImage(n,0,b,a,k,0,0,a,k),d.push({originalWidth:a,originalHeight:k,displayWidth:l,displayHeight:Math.round(k*u),data:p.toDataURL("image/png")})}t({chunks:d,displayWidth:l,displayHeight:s})},n.src=o})}var E=document.getElementById("dropZone"),N=document.getElementById("folderInput"),X=document.getElementById("fileInput"),pe=document.getElementById("fileSelectBtn"),Q=document.getElementById("skippedNotice"),H=document.getElementById("analysisSection"),W=document.getElementById("analysisProgressFill"),B=document.getElementById("analysisProgressText"),q=document.getElementById("previewSection"),oe=document.getElementById("folderPreviewWrap"),V=document.getElementById("folderPreviewContent"),ae=document.getElementById("smartPreviewWrap"),fe=document.getElementById("analysisInfo"),he=document.getElementById("smartPreview"),ie=document.getElementById("stats"),M=document.getElementById("importBtn"),_=document.getElementById("cancelImportBtn"),T=document.getElementById("importProgress"),P=document.getElementById("importProgressFill"),x=document.getElementById("importProgressText");E.addEventListener("click",e=>{e.stopPropagation(),N.value="",N.click()});E.addEventListener("keydown",e=>{(e.key==="Enter"||e.key===" ")&&(e.preventDefault(),N.value="",N.click())});pe.addEventListener("click",()=>{X.value="",X.click()});var D=0;E.addEventListener("dragenter",e=>{e.preventDefault(),D++,E.classList.add("drag-over")});E.addEventListener("dragover",e=>{e.preventDefault(),e.dataTransfer&&(e.dataTransfer.dropEffect="copy")});E.addEventListener("dragleave",()=>{D--,D<=0&&(D=0,E.classList.remove("drag-over"))});E.addEventListener("drop",e=>{e.preventDefault(),D=0,E.classList.remove("drag-over");let t=e.dataTransfer?.items;if(t&&t.length>0){let n=[],o=!1;for(let l=0;l<t.length;l++){let c=t[l];try{let a=c.webkitGetAsEntry?.();if(a&&a.isDirectory){o=!0;continue}}catch{}if(c.kind==="file"){let a=c.getAsFile();a&&n.push(a)}}if(o&&n.length===0){alert(f("folderDropNotSupported"));return}if(n.length>0){Z(n);return}}let r=e.dataTransfer?.files;r&&r.length>0&&Z(Array.from(r))});N.addEventListener("change",e=>be(e.target.files));X.addEventListener("change",e=>Z(Array.from(e.target.files)));M.addEventListener("click",ke);var v=[];function j(e){return e.webkitRelativePath||`${e.name}__${e.size}__${e.lastModified}`}function le(e){return e.filter(t=>{let r=t.name.toLowerCase();return!r.startsWith(".")&&(r.endsWith(".png")||r.endsWith(".jpg")||r.endsWith(".jpeg"))})}function ye(e){for(let t of e){let r=t.webkitRelativePath?.split("/");if(r&&r.length>=3)return!0}return!1}function be(e){let t=Array.from(e),r=le(t);if(r.length===0){alert(f("noImageInFolder"));return}let n=t.length-r.length;n>0&&(Q.innerHTML=`<div class="skipped-notice">${w(f("skippedFiles",{count:n}))}</div>`);let o=new Set(v.map(j)),l=r.filter(c=>!o.has(j(c)));v=v.concat(l),de(v.length),ce()}function Z(e){let t=le(e),r=e.length-t.length;if(r>0&&(Q.innerHTML=`<div class="skipped-notice">${w(f("skippedFiles",{count:r}))}</div>`),t.length===0&&v.length===0){alert(f("noImageFiles"));return}let n=new Set(v.map(j)),o=t.filter(l=>!n.has(j(l)));v=v.concat(o),de(v.length),ce()}function ce(){if(v.length!==0)if(ye(v)){if(U="folder",K(!1),ue=v,I=Se(v),Object.keys(I).length===0){alert(f("folderParseError"));return}Ee()}else{if(U="smart",K(!0),h=[...v].sort((e,t)=>e.name.localeCompare(t.name,void 0,{numeric:!0,sensitivity:"base"})),h.length>Ce&&!confirm(f("largeFileWarning",{count:h.length})))return;me()}}function we(){v=[],ue=[],I={},h=[],F=[],G=[],C=[],Q.innerHTML="",q.style.display="none",H.style.display="none",M.setAttribute("disabled",""),K(!1),ve()}function de(e){E.classList.add("has-files");let t=E.querySelector(".drop-zone-text");t&&(t.innerHTML=`<strong>${w(f("filesReady",{count:e}))}</strong><br><span class="drop-zone-sub">${w(f("addMoreFolders"))}</span>`);let r=document.getElementById("clearAllBtn");r&&(r.style.display="")}function ve(){E.classList.remove("has-files");let e=E.querySelector(".drop-zone-text");e&&(e.innerHTML=`<strong data-i18n="clickSelectFolder">${w(f("clickSelectFolder"))}</strong><br><span class="drop-zone-sub" data-i18n="dropHint">${w(f("dropHint"))}</span>`);let t=document.getElementById("clearAllBtn");t&&(t.style.display="none")}function ke(){U==="folder"?Ie():We()}var ue=[],I={};function Se(e){let t={};return e.forEach(r=>{let n=r.webkitRelativePath;if(!n)return;let o=n.split("/"),l=o[o.length-1],c,a;if(o.length>=3)c=o[1],a=o.slice(2,-1);else if(o.length===2)c=o[0],a=[];else return;t[c]||(t[c]={});let i=t[c];a.length===0?(i._files||(i._files=[]),i._files.push({name:l,file:r})):(a.forEach(u=>{i[u]||(i[u]={}),i=i[u]}),i._files||(i._files=[]),i._files.push({name:l,file:r}))}),t}function Ee(){q.style.display="block",oe.style.display="block",ae.style.display="none",Fe(),M.removeAttribute("disabled")}function Fe(){let e="",t=0,r=0,n=0,o=0;function l(c,a=0,i=!1){let u="";for(let[s,d]of Object.entries(c))if(s==="_files")d.forEach(g=>{u+=`<div class="preview-item preview-file" style="padding-left: ${a+12}px">\u{1F4C4} ${w(g.name)}</div>`,t++});else{if(i){let g=o++;u+=`<div class="preview-item preview-section">\u{1F4C1} [Section] <input type="text" class="section-name-input" data-folder-section="${g}" value="${w(s)}" placeholder="${w(f("sectionNamePlaceholder"))}" /></div>`,r++}else u+=`<div class="preview-item preview-folder" style="padding-left: ${a}px">\u{1F4C2} [AutoLayout] ${w(s)}</div>`,n++;u+=l(d,a+12,!1)}return u}e=l(I,0,!0),V.innerHTML=e,ie.innerHTML=f("folderStats",{sections:r,folders:n,files:t}),V.querySelectorAll(".section-name-input").forEach(c=>{c.addEventListener("change",()=>{ge()})})}function ge(){let e=V.querySelectorAll(".section-name-input[data-folder-section]"),t=Object.keys(I).filter(n=>n!=="_files"),r=[];e.forEach((n,o)=>{let l=n.value.trim();l&&o<t.length&&t[o]!==l&&r.push({oldKey:t[o],newKey:l})});for(let{oldKey:n,newKey:o}of r)if(I[n]){let l=I[n];delete I[n],I[o]=l}}async function Ie(){ge(),M.setAttribute("disabled",""),_.style.display="block",T.style.display="block",Y("folder");let e={structure:{},settings:{imageWidth:J(),maxChunkHeight:se()}},t=0,r=0,n=0;function o(c){for(let[a,i]of Object.entries(c))a==="_files"?t+=i.length:o(i)}o(I);async function l(c,a){for(let[i,u]of Object.entries(c)){if(S.folder)return;if(i==="_files"){a._files=[];for(let s of u){if(S.folder)return;x.textContent=f("processingFile",{name:s.name});try{let g=await re(s.file);a._files.push({name:s.name,chunks:g.chunks,displayWidth:g.displayWidth,displayHeight:g.displayHeight})}catch(g){console.warn("Skipping failed image:",s.name,g),n++}r++;let d=r/t*100;P.style.width=`${d}%`,T.setAttribute("aria-valuenow",String(Math.round(d)))}}else a[i]={},await l(u,a[i])}}if(await l(I,e.structure),_.style.display="none",S.folder){x.textContent=f("importCancelled"),P.style.width="0%",setTimeout(()=>{T.style.display="none",M.removeAttribute("disabled")},1500);return}x.textContent=f("sendingToFigma"),parent.postMessage({pluginMessage:{type:"import",data:e,skippedFiles:n}},"*")}var R=120,Ce=200,h=[],F=[],G=[],C=[];function Me(e){return new Promise((t,r)=>{let n=new Image,o=URL.createObjectURL(e);n.onerror=()=>{URL.revokeObjectURL(o),r(new Error(`Failed to load: ${e.name}`))},n.onload=()=>{let l=R/n.width,c=Math.round(n.height*l),a=document.createElement("canvas");a.width=R,a.height=c,a.getContext("2d").drawImage(n,0,0,R,c);let i=a.getContext("2d").getImageData(0,0,R,c),u=document.createElement("canvas"),s=48,d=Math.round(n.height*(s/n.width));u.width=s,u.height=d,u.getContext("2d").drawImage(n,0,0,s,d),URL.revokeObjectURL(o),t({width:R,height:c,data:i.data,thumbDataUrl:u.toDataURL("image/jpeg",.6)})},n.src=o})}function xe(e,t,r,n){let o=0,l=0,c=0,a=0;for(let m=0;m<n;m+=2)for(let p=0;p<t;p+=2){let y=((r+m)*t+p)*4;o+=e[y],l+=e[y+1],c+=e[y+2],a++}let i=o/a,u=l/a,s=c/a,d=0;for(let m=0;m<n;m+=2)for(let p=0;p<t;p+=2){let y=((r+m)*t+p)*4;d+=(e[y]-i)**2+(e[y+1]-u)**2+(e[y+2]-s)**2}return d/(a*3)>=80}function He(e,t,r){let n=e.width,o=e.height,l=t.height;if(o<20||l<20)return!1;let c=Math.max(4,Math.floor(o*.12)),a=Math.max(2,Math.floor(l*.06)),i=Math.min(30,Math.floor(o*.15));if(i<5)return!1;let u=Math.max(0,o-c-i);if(!xe(e.data,n,u,i))return!1;let s=Math.min(l,Math.floor(l*.65)),d=0;for(let g=a;g<=s-i;g+=2){let m=0,p=0;for(let b=0;b<i;b++)for(let k=0;k<n;k++){let L=((u+b)*n+k)*4,O=((g+b)*n+k)*4;m+=(Math.abs(e.data[L]-t.data[O])+Math.abs(e.data[L+1]-t.data[O+1])+Math.abs(e.data[L+2]-t.data[O+2]))/765,p++}let y=1-m/p;if(y>d&&(d=y),d>r+.03)break}return d>=r}function Ae(e,t,r){let n=e.width,o=e.height,l=t.height;if(o<10||l<10)return!0;let c=Math.max(4,Math.floor(Math.min(o,l)*.13)),a=0,i=0;for(let m=0;m<c;m++)for(let p=0;p<n;p++){let y=((o-c+m)*n+p)*4,b=((l-c+m)*n+p)*4;a+=(Math.abs(e.data[y]-t.data[b])+Math.abs(e.data[y+1]-t.data[b+1])+Math.abs(e.data[y+2]-t.data[b+2]))/765,i++}let u=1-a/i,s=0,d=0;for(let m=0;m<10;m++){let p=Math.floor(o*(m+1)/11),y=Math.floor(l*(m+1)/11);for(let b=0;b<n;b+=2){let k=(p*n+b)*4,L=(y*n+b)*4;s+=(Math.abs(e.data[k]-t.data[L])+Math.abs(e.data[k+1]-t.data[L+1])+Math.abs(e.data[k+2]-t.data[L+2]))/765,d++}}let g=1-s/d;return u<r||g<Math.max(.3,r-.25)}async function me(){q.style.display="none",H.style.display="block",M.setAttribute("disabled",""),H.querySelector(".progress").style.display="block",document.getElementById("cancelAnalysisBtn").disabled=!1,Y("analysis");let e=parseFloat(document.getElementById("scrollSensitivity").value),t=parseFloat(document.getElementById("sectionSensitivity").value);F=[],G=[];let r=0;for(let s=0;s<h.length;s++){if(S.analysis){$();return}B.textContent=f("loadingImage",{n:s+1,total:h.length});let d=(s+1)/h.length*50;W.style.width=`${d}%`,H.querySelector("[role=progressbar]")?.setAttribute("aria-valuenow",String(Math.round(d)));try{let g=await Me(h[s]);F.push(g),G.push(g.thumbDataUrl)}catch(g){console.warn("Skipping failed image:",h[s].name,g),F.push(null),G.push(""),r++}}if(S.analysis){$();return}let n=[];for(let s=0;s<F.length;s++)F[s]!==null&&n.push(s);if(n.length===0){B.textContent=f("noValidImages"),setTimeout(()=>{H.style.display="none"},2e3);return}let o=n.length-1,l=new Map;for(let s=0;s<o;s++){if(S.analysis){$();return}let d=n[s],g=n[s+1],m=50+s/o*25;B.textContent=f("detectingScroll",{n:s+1,total:o}),W.style.width=`${m}%`,l.set(`${d}-${g}`,He(F[d],F[g],e)),s%5===0&&await new Promise(p=>setTimeout(p,0))}if(S.analysis){$();return}let c=[],a={screens:[n[0]],isScrollGroup:!1};for(let s=0;s<o;s++){let d=n[s],g=n[s+1];l.get(`${d}-${g}`)?(a.screens.push(g),a.isScrollGroup=a.screens.length>1):(c.push(a),a={screens:[g],isScrollGroup:!1})}c.push(a);let i=[0];for(let s=1;s<c.length;s++){if(S.analysis){$();return}let d=75+s/c.length*20;B.textContent=f("detectingSection",{n:s,total:c.length}),W.style.width=`${d}%`;let g=c[s-1].screens[0],m=c[s].screens[0];F[g]&&F[m]&&Ae(F[g],F[m],t)&&i.push(s),s%5===0&&await new Promise(p=>setTimeout(p,0))}C=[];let u=new Set;for(let s=0;s<i.length;s++){let d=i[s],g=s+1<i.length?i[s+1]:c.length,m=c.slice(d,g),p=Pe({groups:m},u);p&&u.add(p),C.push({name:"",suggestedName:p||`Section ${s+1}`,groups:m})}W.style.width="100%",B.textContent=f("analysisComplete"),setTimeout(()=>{H.style.display="none",Be(r)},500)}function $(){H.querySelector(".progress").style.display="none",H.style.display="none",W.style.width="0%"}function Le(){h.length!==0&&me()}var Te=[{label:"Splash",keywords:["splash","launch","intro","welcome","tutorial"]},{label:"App Store",keywords:["appstore","app_store","app-store","store","download","install"]},{label:"Login",keywords:["login","signin","sign_in","sign-in","log-in","log_in"]},{label:"Registration",keywords:["register","signup","sign_up","sign-up","onboarding","create_account"]},{label:"Home",keywords:["home","top","main","feed","timeline","dashboard"]},{label:"Search",keywords:["search","explore","discover","find","browse"]},{label:"Map",keywords:["map","location","gps","navigate","navigation","ride","trip"]},{label:"Booking",keywords:["booking","book","reserve","reservation","schedule"]},{label:"Chat",keywords:["chat","message","dm","inbox","conversation","msg"]},{label:"Notifications",keywords:["notification","alert","notice","notif"]},{label:"Profile",keywords:["profile","account","mypage","my_page","my-page","user"]},{label:"Settings",keywords:["settings","setting","config","preference","pref"]},{label:"Payment",keywords:["payment","pay","checkout","cart","billing","wallet"]},{label:"Detail",keywords:["detail","item","product","article","post","single"]},{label:"List",keywords:["list","catalog","gallery","collection"]},{label:"Menu",keywords:["menu","nav","sidebar","drawer","hamburger"]},{label:"Camera",keywords:["camera","photo","capture","scan","qr"]},{label:"History",keywords:["history","log","activity","recent","order"]},{label:"Favorites",keywords:["favorite","fav","saved","bookmark","like","wishlist"]},{label:"Help",keywords:["help","support","faq","contact","about"]}];function Pe(e,t){let r=[];if(e.groups.forEach(i=>i.screens.forEach(u=>{h[u]&&r.push(h[u].name.toLowerCase().replace(/\.[^.]+$/,""))})),r.length===0)return"";let n=[];for(let i of Te){let u=0;for(let s of r)for(let d of i.keywords)if(s.includes(d)){u++;break}u>0&&n.push({label:i.label,score:u})}n.sort((i,u)=>u.score-i.score);for(let i of n)if(!t.has(i.label))return i.label;let o=new Map,l=new Set(["img","image","screenshot","screen","photo","pic","capture","shot","iphone","android","pixel","samsung","simulator","png","jpg","jpeg","at","am","pm"]);for(let i of r){let u=i.split(/[\s_\-./\\()[\]{}]+/).filter(d=>d.length>=3&&!/^\d+$/.test(d)&&!l.has(d)),s=new Set;for(let d of u)s.has(d)||(o.set(d,(o.get(d)||0)+1),s.add(d))}let c="",a=1;for(let[i,u]of o)u>a&&!t.has(ee(i))&&(c=i,a=u);return c?ee(c):""}function ee(e){return e.charAt(0).toUpperCase()+e.slice(1)}function Be(e){q.style.display="block",oe.style.display="none",ae.style.display="block",Re(e),M.removeAttribute("disabled")}function Re(e){let t=0,r=0,n="";C.forEach((l,c)=>{let a=0;l.groups.forEach(s=>{a+=s.screens.length,s.isScrollGroup&&r++}),t+=a;let i=a>1?f("screens"):f("screen"),u=l.name||l.suggestedName;n+='<div class="smart-section">',n+='<div class="smart-section-header">',n+='<span class="section-badge">Section</span>',n+='<div class="section-name-wrapper">',n+=`<input type="text" class="section-name-input" value="${w(u)}" placeholder="${w(f("sectionNamePlaceholder"))}" data-section-idx="${c}" onchange="updateSectionName(${c}, this.value)" aria-label="Section name">`,n+="</div>",n+=`<span class="smart-section-count">${a} ${w(i)}</span>`,n+="</div>",n+='<div class="smart-section-thumbs">',l.groups.forEach(s=>{let d=s.isScrollGroup?"smart-group-wrapper scroll-group":"smart-group-wrapper";n+=`<div class="${d}">`,s.screens.forEach(g=>{let m=G[g]||"",p=h[g]?h[g].name:"";m&&(n+=`<img src="${m}" class="smart-thumb" title="${w(p)}" alt="${w(p)}">`)}),n+="</div>"}),n+="</div></div>"}),he.innerHTML=n;let o=f("detectedSummary",{sections:C.length,scrollGroups:r,total:h.length});e>0&&(o+=f("loadErrorsSuffix",{count:e})),fe.innerHTML=o,ie.innerHTML=f("statsSummary",{sections:C.length,scrollGroups:r,screens:t})}function $e(e,t){e>=0&&e<C.length&&(C[e].name=t)}async function We(){M.setAttribute("disabled",""),_.style.display="block",T.style.display="block",Y("smart");let e=[],t=0,r=0;C.forEach(o=>o.groups.forEach(l=>t+=l.screens.length));let n=0;for(let o of C){if(S.smart)break;let l=[];for(let a of o.groups){if(S.smart)break;let i=[];for(let u of a.screens){if(S.smart)break;x.textContent=f("processingFile",{name:h[u].name});try{let d=await re(h[u]);i.push({name:h[u].name,chunks:d.chunks,displayWidth:d.displayWidth,displayHeight:d.displayHeight})}catch(d){console.warn("Skipping failed image:",h[u].name,d),r++}n++;let s=n/t*100;P.style.width=`${s}%`,T.setAttribute("aria-valuenow",String(Math.round(s)))}l.push({screens:i,isScrollGroup:a.isScrollGroup})}let c=o.name||o.suggestedName||`Section ${C.indexOf(o)+1}`;e.push({name:c,groups:l})}if(_.style.display="none",S.smart){x.textContent=f("importCancelled"),P.style.width="0%",setTimeout(()=>{T.style.display="none",M.removeAttribute("disabled")},1500);return}x.textContent=f("sendingToFigma"),parent.postMessage({pluginMessage:{type:"smart-import",data:{sections:e,settings:{imageWidth:J(),sectionGap:100,groupGap:8,scrollGap:0}},skippedFiles:r}},"*")}window.onmessage=e=>{let t=e.data.pluginMessage;t&&(t.type==="progress"?(x.textContent=t.text,t.percent!==void 0&&(P.style.width=`${t.percent}%`)):t.type==="complete"?(x.textContent=f("importComplete"),P.style.width="100%",setTimeout(()=>{T.style.display="none",M.removeAttribute("disabled")},2e3)):t.type==="error"&&(x.textContent=`Error: ${t.text}`,M.removeAttribute("disabled")))};function De(){ne(U)}window.cancelImport=ne;window.cancelCurrentImport=De;window.reAnalyze=Le;window.setLang=te;window.updateSectionName=$e;window.clearAllFiles=we;})();
 </script>
 </body>
 </html>

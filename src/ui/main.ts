@@ -4,20 +4,12 @@
 
 const TEXTS = {
   en: {
-    tabFolder: 'Folder Import',
-    tabSmart: 'Smart Import',
-    folderDesc: 'Already organized your screenshots into folders? Import the folder structure directly as Figma Sections.',
-    folderStep1: '1. Select Screenshot Folder',
-    folderStep2: '2. Preview Structure',
-    folderStep3: '3. Settings',
-    smartStep1: '1. Select Screenshots',
-    smartStep2: '2. Preview & Edit Sections',
-    smartStep3: '3. Settings',
-    smartDesc: 'Just have a bunch of screenshots? Drop them all in — scroll sequences and app sections are detected automatically.',
     clickSelectFolder: 'Click to select folder',
-    clickSelectScreenshots: 'Click to select app screenshots',
-    smartSortHint: 'Select all screenshots at once — sorted by filename automatically',
-    orSelectFiles: 'Or select individual image files:',
+    dropHint: 'or drop image files here (not folders)',
+    chooseFiles: 'Choose individual files',
+    orDivider: 'or',
+    previewTitle: 'Preview',
+    settingsTitle: 'Settings',
     imageWidth: 'Image Width (px)',
     maxChunkHeight: 'Max Chunk Height (px)',
     scrollSens: 'Scroll Sensitivity',
@@ -38,6 +30,7 @@ const TEXTS = {
     noValidImages: 'No valid images found.',
     noImageFiles: 'No image files selected',
     noImageInFolder: 'No image files found in selected folder',
+    folderDropNotSupported: 'Folder drop is not supported in Figma plugins.\nPlease use "Click to select folder" above, or drop individual image files instead.',
     folderParseError: 'Could not parse folder structure. Please select the parent folder containing section folders.',
     loadingImage: 'Loading image {n}/{total}...',
     detectingScroll: 'Detecting scroll sequences... ({n}/{total})',
@@ -51,30 +44,19 @@ const TEXTS = {
     folderStats: '<strong>{sections}</strong> sections, <strong>{folders}</strong> auto layouts, <strong>{files}</strong> images',
     screens: 'screens',
     screen: 'screen',
-    geminiApiKeyLabel: 'Gemini API Key',
-    optionalBadge: '(optional)',
-    geminiApiKeyHint: 'Free — AI suggests section names from screenshots. Without a key, names are inferred from filenames only.',
-    getApiKey: 'Get free API key →',
-    aiSuggesting: 'AI suggesting section names...',
-    aiSuggestDone: 'AI suggested {count} section names',
-    aiSuggestError: 'AI suggestion failed — using filename hints',
-    aiSuggestNoKey: '',
+    sectionNamePlaceholder: 'e.g. product-photos',
+    filesReady: '{count} images ready',
+    addMoreFolders: 'Click to add more folders',
+    clearAll: 'Clear all',
+    changeSelection: 'Click to change selection',
   },
   ja: {
-    tabFolder: 'フォルダインポート',
-    tabSmart: 'スマートインポート',
-    folderDesc: 'スクリーンショットをフォルダで整理済み？ フォルダ構造をそのままFigmaのセクションとしてインポートします。',
-    folderStep1: '1. スクリーンショットフォルダを選択',
-    folderStep2: '2. 構造をプレビュー',
-    folderStep3: '3. 設定',
-    smartStep1: '1. スクリーンショットを選択',
-    smartStep2: '2. セクションのプレビュー・編集',
-    smartStep3: '3. 設定',
-    smartDesc: 'スクショが未整理でもOK。まとめて投げ込めば、スクロール連結やセクションを自動で検出します。',
     clickSelectFolder: 'クリックしてフォルダを選択',
-    clickSelectScreenshots: 'クリックしてスクリーンショットを選択',
-    smartSortHint: 'すべてのスクリーンショットを一度に選択 — ファイル名で自動ソート',
-    orSelectFiles: 'または個別の画像ファイルを選択:',
+    dropHint: 'または画像ファイルをここにドロップ（フォルダ不可）',
+    chooseFiles: '個別のファイルを選択',
+    orDivider: 'または',
+    previewTitle: 'プレビュー',
+    settingsTitle: '設定',
     imageWidth: '画像の幅 (px)',
     maxChunkHeight: '最大チャンク高さ (px)',
     scrollSens: 'スクロール感度',
@@ -95,6 +77,7 @@ const TEXTS = {
     noValidImages: '有効な画像が見つかりませんでした。',
     noImageFiles: '画像ファイルが選択されていません',
     noImageInFolder: 'フォルダ内に画像ファイルが見つかりません',
+    folderDropNotSupported: 'Figmaプラグインではフォルダのドロップに対応していません。\n上の「クリックしてフォルダを選択」を使うか、画像ファイルを直接ドロップしてください。',
     folderParseError: 'フォルダ構造を解析できませんでした。セクションフォルダを含む親フォルダを選択してください。',
     loadingImage: '画像読み込み中 {n}/{total}...',
     detectingScroll: 'スクロール検出中... ({n}/{total})',
@@ -108,14 +91,11 @@ const TEXTS = {
     folderStats: '<strong>{sections}</strong>セクション、<strong>{folders}</strong>オートレイアウト、<strong>{files}</strong>画像',
     screens: '画面',
     screen: '画面',
-    geminiApiKeyLabel: 'Gemini APIキー',
-    optionalBadge: '（任意）',
-    geminiApiKeyHint: '無料 — AIがスクリーンショットからセクション名を提案。キー未設定時はファイル名から推定のみ。',
-    getApiKey: '無料APIキーを取得 →',
-    aiSuggesting: 'AIがセクション名を提案中...',
-    aiSuggestDone: 'AIが{count}件のセクション名を提案しました',
-    aiSuggestError: 'AI提案に失敗 — ファイル名から推定',
-    aiSuggestNoKey: '',
+    sectionNamePlaceholder: '例: 商品写真',
+    filesReady: '{count}枚の画像を読み込み済み',
+    addMoreFolders: 'クリックしてフォルダを追加',
+    clearAll: 'すべてクリア',
+    changeSelection: 'クリックして選択を変更',
   }
 };
 
@@ -149,12 +129,7 @@ function setLang(newLang: string) {
   });
 }
 
-// Keep toggleLang for backward compatibility
-function toggleLang() { setLang(lang === 'en' ? 'ja' : 'en'); }
-
-// Initialize language + settings on load
 setLang(lang);
-initGeminiApiKeyField();
 
 // ================================================================
 // Utilities
@@ -168,110 +143,6 @@ function escapeHtml(str: string) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
-
-// ================================================================
-// Gemini AI — Section Name Suggestion
-// ================================================================
-
-function getGeminiApiKey(): string {
-  try { return localStorage.getItem('bsi-gemini-key') || ''; } catch { return ''; }
-}
-
-function saveGeminiApiKey(key: string) {
-  try { localStorage.setItem('bsi-gemini-key', key.trim()); } catch {}
-}
-
-function toggleApiKeyVisibility() {
-  const input = document.getElementById('geminiApiKey') as HTMLInputElement;
-  const isPassword = input.type === 'password';
-  input.type = isPassword ? 'text' : 'password';
-  input.parentElement?.querySelector('.api-key-toggle')?.classList.toggle('api-key-visible', isPassword);
-}
-
-function initGeminiApiKeyField() {
-  const key = getGeminiApiKey();
-  const input = document.getElementById('geminiApiKey') as HTMLInputElement;
-  if (input && key) input.value = key;
-}
-
-async function suggestSectionNamesWithAI(
-  sections: Array<{ suggestedName: string; groups: Array<{ screens: number[] }> }>,
-  thumbnails: string[]
-): Promise<string[]> {
-  const apiKey = getGeminiApiKey();
-  if (!apiKey) return [];
-
-  const parts: Array<{ text: string } | { inlineData: { mimeType: string; data: string } }> = [];
-  parts.push({
-    text: `You are analyzing screenshots from a mobile app. For each numbered image below, provide a SHORT descriptive section label (1-3 words, e.g. "Home", "Login", "Settings", "Profile", "Search", "Registration", "Payment", "Map", "Booking", "Chat"). Reply with ONLY the labels, one per line, in the same order as the images. No numbering, no explanation.`
-  });
-
-  let imageCount = 0;
-  for (let i = 0; i < sections.length; i++) {
-    const firstScreenIdx = sections[i].groups[0]?.screens[0];
-    if (firstScreenIdx == null || !thumbnails[firstScreenIdx]) continue;
-    const dataUrl = thumbnails[firstScreenIdx];
-    const base64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
-    const mimeMatch = dataUrl.match(/^data:(image\/\w+);/);
-    const mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
-    parts.push({ text: `Image ${i + 1}:` });
-    parts.push({ inlineData: { mimeType, data: base64 } });
-    imageCount++;
-  }
-
-  if (imageCount === 0) return [];
-
-  const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts }] })
-    }
-  );
-
-  if (!resp.ok) {
-    const errText = await resp.text().catch(() => '');
-    throw new Error(`Gemini API error ${resp.status}: ${errText.slice(0, 200)}`);
-  }
-
-  const data = await resp.json();
-  const text: string = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const labels = text.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0 && l.length < 40);
-  return labels;
-}
-
-// ================================================================
-// Mode Switching (with ARIA + keyboard)
-// ================================================================
-
-let currentMode = 'folder';
-const tabKeys = ['folder', 'smart'];
-
-function switchMode(mode: string) {
-  currentMode = mode;
-  tabKeys.forEach(key => {
-    const tab = document.getElementById('tab' + key.charAt(0).toUpperCase() + key.slice(1));
-    const panel = document.getElementById(key + 'Mode');
-    const isActive = key === mode;
-    tab!.setAttribute('aria-selected', String(isActive));
-    tab!.tabIndex = isActive ? 0 : -1;
-    panel!.classList.toggle('active', isActive);
-  });
-}
-
-document.querySelector('.mode-tabs')!.addEventListener('keydown', (e: KeyboardEvent) => {
-  const idx = tabKeys.indexOf(currentMode);
-  let newIdx = idx;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { newIdx = (idx + 1) % tabKeys.length; }
-  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { newIdx = (idx - 1 + tabKeys.length) % tabKeys.length; }
-  else if (e.key === 'Home') { newIdx = 0; }
-  else if (e.key === 'End') { newIdx = tabKeys.length - 1; }
-  else { return; }
-  e.preventDefault();
-  switchMode(tabKeys[newIdx]);
-  document.getElementById('tab' + tabKeys[newIdx].charAt(0).toUpperCase() + tabKeys[newIdx].slice(1))!.focus();
-});
 
 // ================================================================
 // Cancel Support
@@ -288,17 +159,27 @@ function cancelImport(mode: string) {
 function resetCancel(mode: string) { cancelFlags[mode as keyof typeof cancelFlags] = false; }
 
 // ================================================================
+// Import Mode Tracking
+// ================================================================
+
+let currentImportMode: 'folder' | 'smart' = 'folder';
+
+function showSmartSettings(visible: boolean) {
+  document.querySelectorAll('.smart-only-settings').forEach(el => {
+    (el as HTMLElement).style.display = visible ? '' : 'none';
+  });
+}
+
+// ================================================================
 // Shared: Image Processing
 // ================================================================
 
 function getImageWidth() {
-  const id = currentMode === 'smart' ? 'smartImageWidth' : 'imageWidth';
-  return parseInt((document.getElementById(id) as HTMLInputElement).value) || 360;
+  return parseInt((document.getElementById('imageWidth') as HTMLInputElement).value) || 360;
 }
 
 function getMaxChunkHeight() {
-  const id = currentMode === 'smart' ? 'smartMaxChunkHeight' : 'maxChunkHeight';
-  return parseInt((document.getElementById(id) as HTMLInputElement).value) || 4096;
+  return parseInt((document.getElementById('maxChunkHeight') as HTMLInputElement).value) || 4096;
 }
 
 async function processImage(file: File) {
@@ -337,59 +218,233 @@ async function processImage(file: File) {
 }
 
 // ================================================================
-// Folder Import Mode
+// DOM References
 // ================================================================
-
-let selectedFiles: File[] = [];
-let folderStructure: Record<string, unknown> = {};
 
 const dropZone = document.getElementById('dropZone')!;
 const folderInput = document.getElementById('folderInput')! as HTMLInputElement;
 const fileInput = document.getElementById('fileInput')! as HTMLInputElement;
+const fileSelectBtn = document.getElementById('fileSelectBtn')!;
+const skippedNotice = document.getElementById('skippedNotice')!;
+
+const analysisSection = document.getElementById('analysisSection')!;
+const analysisProgressFill = document.getElementById('analysisProgressFill')!;
+const analysisProgressText = document.getElementById('analysisProgressText')!;
+
 const previewSection = document.getElementById('previewSection')!;
-const preview = document.getElementById('preview')!;
+const folderPreviewWrap = document.getElementById('folderPreviewWrap')!;
+const folderPreviewContent = document.getElementById('folderPreviewContent')!;
+const smartPreviewWrap = document.getElementById('smartPreviewWrap')!;
+const analysisInfo = document.getElementById('analysisInfo')!;
+const smartPreviewEl = document.getElementById('smartPreview')!;
 const statsEl = document.getElementById('stats')!;
+
 const importBtn = document.getElementById('importBtn')!;
-const cancelFolderBtn = document.getElementById('cancelFolderBtn')!;
-const progressEl = document.getElementById('progress')!;
-const progressFill = document.getElementById('progressFill')!;
-const progressText = document.getElementById('progressText')!;
+const cancelImportBtn = document.getElementById('cancelImportBtn')!;
+const importProgress = document.getElementById('importProgress')!;
+const importProgressFill = document.getElementById('importProgressFill')!;
+const importProgressText = document.getElementById('importProgressText')!;
 
-dropZone.addEventListener('click', (e) => { e.stopPropagation(); folderInput.click(); });
-dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); folderInput.click(); } });
-folderInput.addEventListener('change', (e) => handleFiles((e.target as HTMLInputElement).files!));
-fileInput.addEventListener('change', (e) => handleIndividualFiles((e.target as HTMLInputElement).files!));
-importBtn.addEventListener('click', startFolderImport);
+// ================================================================
+// Drop Zone Events
+// ================================================================
 
-function handleIndividualFiles(files: FileList) {
-  const imageFiles = Array.from(files).filter(f => {
+dropZone.addEventListener('click', (e) => { e.stopPropagation(); folderInput.value = ''; folderInput.click(); });
+dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); folderInput.value = ''; folderInput.click(); } });
+
+fileSelectBtn.addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
+
+let dragCounter = 0;
+dropZone.addEventListener('dragenter', (e) => {
+  e.preventDefault();
+  dragCounter++;
+  dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+});
+dropZone.addEventListener('dragleave', () => {
+  dragCounter--;
+  if (dragCounter <= 0) { dragCounter = 0; dropZone.classList.remove('drag-over'); }
+});
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dragCounter = 0;
+  dropZone.classList.remove('drag-over');
+
+  const items = e.dataTransfer?.items;
+  if (items && items.length > 0) {
+    const imageFiles: File[] = [];
+    let hasDirectory = false;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      try {
+        const entry = item.webkitGetAsEntry?.();
+        if (entry && entry.isDirectory) { hasDirectory = true; continue; }
+      } catch (_) { /* ignore */ }
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) imageFiles.push(file);
+      }
+    }
+    if (hasDirectory && imageFiles.length === 0) {
+      alert(t('folderDropNotSupported'));
+      return;
+    }
+    if (imageFiles.length > 0) {
+      handleDroppedFiles(imageFiles);
+      return;
+    }
+  }
+
+  const dtFiles = e.dataTransfer?.files;
+  if (dtFiles && dtFiles.length > 0) {
+    handleDroppedFiles(Array.from(dtFiles));
+  }
+});
+
+folderInput.addEventListener('change', (e) => handleFolderSelected((e.target as HTMLInputElement).files!));
+fileInput.addEventListener('change', (e) => handleDroppedFiles(Array.from((e.target as HTMLInputElement).files!)));
+importBtn.addEventListener('click', startImport);
+
+// ================================================================
+// Input Routing — Multi-folder accumulation with auto-detect
+// ================================================================
+
+let accumulatedFiles: File[] = [];
+
+function fileKey(f: File): string {
+  const rel = (f as File & { webkitRelativePath?: string }).webkitRelativePath;
+  return rel || `${f.name}__${f.size}__${f.lastModified}`;
+}
+
+function filterImages(files: File[]): File[] {
+  return files.filter(f => {
     const name = f.name.toLowerCase();
     return !name.startsWith('.') && (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
   });
-  if (imageFiles.length === 0) { alert(t('noImageFiles')); return; }
-  folderStructure = { 'imported-images': { _files: imageFiles.map(f => ({ name: f.name, file: f })) } };
-  renderFolderPreview();
-  previewSection.style.display = 'block';
-  importBtn.removeAttribute('disabled');
 }
 
-function handleFiles(files: FileList) {
-  selectedFiles = Array.from(files).filter(f => {
-    const name = f.name.toLowerCase();
-    return !name.startsWith('.') && (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
-  });
-  if (selectedFiles.length === 0) { alert(t('noImageInFolder')); return; }
-  folderStructure = buildFolderStructure(selectedFiles);
-  if (Object.keys(folderStructure).length === 0) { alert(t('folderParseError')); return; }
-  renderFolderPreview();
-  previewSection.style.display = 'block';
-  importBtn.removeAttribute('disabled');
+function hasSubfolders(files: File[]): boolean {
+  for (const file of files) {
+    const parts = (file as File & { webkitRelativePath?: string }).webkitRelativePath?.split('/');
+    if (parts && parts.length >= 3) return true;
+  }
+  return false;
 }
 
+function handleFolderSelected(fileList: FileList) {
+  const allFiles = Array.from(fileList);
+  const imageFiles = filterImages(allFiles);
+  if (imageFiles.length === 0) { alert(t('noImageInFolder')); return; }
+
+  const skipped = allFiles.length - imageFiles.length;
+  if (skipped > 0) {
+    skippedNotice.innerHTML = `<div class="skipped-notice">${escapeHtml(t('skippedFiles', { count: skipped }))}</div>`;
+  }
+
+  const existingKeys = new Set(accumulatedFiles.map(fileKey));
+  const uniqueNew = imageFiles.filter(f => !existingKeys.has(fileKey(f)));
+  accumulatedFiles = accumulatedFiles.concat(uniqueNew);
+
+  markDropZoneActive(accumulatedFiles.length);
+  processAccumulatedFiles();
+}
+
+function handleDroppedFiles(files: File[]) {
+  const imageFiles = filterImages(files);
+  const skipped = files.length - imageFiles.length;
+  if (skipped > 0) {
+    skippedNotice.innerHTML = `<div class="skipped-notice">${escapeHtml(t('skippedFiles', { count: skipped }))}</div>`;
+  }
+  if (imageFiles.length === 0 && accumulatedFiles.length === 0) {
+    alert(t('noImageFiles'));
+    return;
+  }
+
+  const existingKeys = new Set(accumulatedFiles.map(fileKey));
+  const uniqueNew = imageFiles.filter(f => !existingKeys.has(fileKey(f)));
+  accumulatedFiles = accumulatedFiles.concat(uniqueNew);
+
+  markDropZoneActive(accumulatedFiles.length);
+  processAccumulatedFiles();
+}
+
+function processAccumulatedFiles() {
+  if (accumulatedFiles.length === 0) return;
+
+  if (hasSubfolders(accumulatedFiles)) {
+    currentImportMode = 'folder';
+    showSmartSettings(false);
+    folderSelectedFiles = accumulatedFiles;
+    folderStructure = buildFolderStructure(accumulatedFiles);
+    if (Object.keys(folderStructure).length === 0) { alert(t('folderParseError')); return; }
+    showFolderPreview();
+  } else {
+    currentImportMode = 'smart';
+    showSmartSettings(true);
+    smartRawFiles = [...accumulatedFiles].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+    if (smartRawFiles.length > MAX_FILES_WARNING) {
+      if (!confirm(t('largeFileWarning', { count: smartRawFiles.length }))) return;
+    }
+    analyzeScreenshots();
+  }
+}
+
+function clearAllFiles() {
+  accumulatedFiles = [];
+  folderSelectedFiles = [];
+  folderStructure = {};
+  smartRawFiles = [];
+  smartCompData = [];
+  smartThumbnails = [];
+  smartSections = [];
+  skippedNotice.innerHTML = '';
+  previewSection.style.display = 'none';
+  analysisSection.style.display = 'none';
+  importBtn.setAttribute('disabled', '');
+  showSmartSettings(false);
+  resetDropZone();
+}
+
+function markDropZoneActive(fileCount: number) {
+  dropZone.classList.add('has-files');
+  const textEl = dropZone.querySelector('.drop-zone-text');
+  if (textEl) {
+    textEl.innerHTML = `<strong>${escapeHtml(t('filesReady', { count: fileCount }))}</strong><br><span class="drop-zone-sub">${escapeHtml(t('addMoreFolders'))}</span>`;
+  }
+  const clearBtn = document.getElementById('clearAllBtn');
+  if (clearBtn) clearBtn.style.display = '';
+}
+
+function resetDropZone() {
+  dropZone.classList.remove('has-files');
+  const textEl = dropZone.querySelector('.drop-zone-text');
+  if (textEl) {
+    textEl.innerHTML = `<strong data-i18n="clickSelectFolder">${escapeHtml(t('clickSelectFolder'))}</strong><br><span class="drop-zone-sub" data-i18n="dropHint">${escapeHtml(t('dropHint'))}</span>`;
+  }
+  const clearBtn = document.getElementById('clearAllBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+}
+
+function startImport() {
+  if (currentImportMode === 'folder') startFolderImport();
+  else startSmartImport();
+}
+
+// ================================================================
+// Folder Import Mode
+// ================================================================
+
+let folderSelectedFiles: File[] = [];
+let folderStructure: Record<string, unknown> = {};
 function buildFolderStructure(files: File[]) {
   const structure: Record<string, unknown> = {};
   files.forEach(file => {
-    const pathParts = (file as File & { webkitRelativePath?: string }).webkitRelativePath.split('/');
+    const rel = (file as File & { webkitRelativePath?: string }).webkitRelativePath;
+    if (!rel) return;
+    const pathParts = rel.split('/');
     const fileName = pathParts[pathParts.length - 1];
     let sectionName: string, subfolders: string[];
     if (pathParts.length >= 3) { sectionName = pathParts[1]; subfolders = pathParts.slice(2, -1); }
@@ -409,31 +464,73 @@ function buildFolderStructure(files: File[]) {
   return structure;
 }
 
+function showFolderPreview() {
+  previewSection.style.display = 'block';
+  folderPreviewWrap.style.display = 'block';
+  smartPreviewWrap.style.display = 'none';
+  renderFolderPreview();
+  importBtn.removeAttribute('disabled');
+}
+
 function renderFolderPreview() {
   let html = '';
   let totalFiles = 0, totalSections = 0, totalFolders = 0;
+  let sectionIdx = 0;
+
   function renderFolder(obj: Record<string, unknown>, indent = 0, isSection = false): string {
     let result = '';
     for (const [key, value] of Object.entries(obj)) {
       if (key === '_files') {
         (value as Array<{ name: string }>).forEach(f => { result += `<div class="preview-item preview-file" style="padding-left: ${indent + 12}px">\u{1F4C4} ${escapeHtml(f.name)}</div>`; totalFiles++; });
       } else {
-        if (isSection) { result += `<div class="preview-item preview-section">\u{1F4C1} [Section] ${escapeHtml(key)}</div>`; totalSections++; }
-        else { result += `<div class="preview-item preview-folder" style="padding-left: ${indent}px">\u{1F4C2} [AutoLayout] ${escapeHtml(key)}</div>`; totalFolders++; }
+        if (isSection) {
+          const idx = sectionIdx++;
+          result += `<div class="preview-item preview-section">\u{1F4C1} [Section] <input type="text" class="section-name-input" data-folder-section="${idx}" value="${escapeHtml(key)}" placeholder="${escapeHtml(t('sectionNamePlaceholder'))}" /></div>`;
+          totalSections++;
+        } else {
+          result += `<div class="preview-item preview-folder" style="padding-left: ${indent}px">\u{1F4C2} [AutoLayout] ${escapeHtml(key)}</div>`;
+          totalFolders++;
+        }
         result += renderFolder(value as Record<string, unknown>, indent + 12, false);
       }
     }
     return result;
   }
   html = renderFolder(folderStructure, 0, true);
-  preview.innerHTML = html;
+  folderPreviewContent.innerHTML = html;
   statsEl.innerHTML = t('folderStats', { sections: totalSections, folders: totalFolders, files: totalFiles });
+
+  folderPreviewContent.querySelectorAll('.section-name-input').forEach(input => {
+    (input as HTMLInputElement).addEventListener('change', () => {
+      applyFolderSectionRenames();
+    });
+  });
+}
+
+function applyFolderSectionRenames() {
+  const inputs = folderPreviewContent.querySelectorAll<HTMLInputElement>('.section-name-input[data-folder-section]');
+  const oldKeys = Object.keys(folderStructure).filter(k => k !== '_files');
+  const renames: Array<{ oldKey: string; newKey: string }> = [];
+  inputs.forEach((input, i) => {
+    const newName = input.value.trim();
+    if (newName && i < oldKeys.length && oldKeys[i] !== newName) {
+      renames.push({ oldKey: oldKeys[i], newKey: newName });
+    }
+  });
+  for (const { oldKey, newKey } of renames) {
+    if (folderStructure[oldKey]) {
+      const data = folderStructure[oldKey];
+      delete folderStructure[oldKey];
+      folderStructure[newKey] = data;
+    }
+  }
 }
 
 async function startFolderImport() {
+  applyFolderSectionRenames();
   importBtn.setAttribute('disabled', '');
-  cancelFolderBtn.style.display = 'block';
-  progressEl.style.display = 'block';
+  cancelImportBtn.style.display = 'block';
+  importProgress.style.display = 'block';
   resetCancel('folder');
   const processedData = { structure: {} as Record<string, unknown>, settings: { imageWidth: getImageWidth(), maxChunkHeight: getMaxChunkHeight() } };
   let totalFiles = 0, processedFiles = 0, skippedFiles = 0;
@@ -446,28 +543,28 @@ async function startFolderImport() {
         target._files = [];
         for (const fileInfo of value as Array<{ name: string; file: File }>) {
           if (cancelFlags.folder) return;
-          progressText.textContent = t('processingFile', { name: fileInfo.name });
+          importProgressText.textContent = t('processingFile', { name: fileInfo.name });
           try {
             const result = await processImage(fileInfo.file);
             (target._files as Array<{ name: string; chunks: unknown; displayWidth: number; displayHeight: number }>).push({ name: fileInfo.name, chunks: result.chunks, displayWidth: result.displayWidth, displayHeight: result.displayHeight });
           } catch (e) { console.warn('Skipping failed image:', fileInfo.name, e); skippedFiles++; }
           processedFiles++;
           const pct = (processedFiles / totalFiles) * 100;
-          progressFill.style.width = `${pct}%`;
-          progressEl.setAttribute('aria-valuenow', String(Math.round(pct)));
+          importProgressFill.style.width = `${pct}%`;
+          importProgress.setAttribute('aria-valuenow', String(Math.round(pct)));
         }
       } else { target[key] = {}; await processFolder(value as Record<string, unknown>, target[key] as Record<string, unknown>); }
     }
   }
   await processFolder(folderStructure, processedData.structure);
-  cancelFolderBtn.style.display = 'none';
+  cancelImportBtn.style.display = 'none';
   if (cancelFlags.folder) {
-    progressText.textContent = t('importCancelled');
-    progressFill.style.width = '0%';
-    setTimeout(() => { progressEl.style.display = 'none'; importBtn.removeAttribute('disabled'); }, 1500);
+    importProgressText.textContent = t('importCancelled');
+    importProgressFill.style.width = '0%';
+    setTimeout(() => { importProgress.style.display = 'none'; importBtn.removeAttribute('disabled'); }, 1500);
     return;
   }
-  progressText.textContent = t('sendingToFigma');
+  importProgressText.textContent = t('sendingToFigma');
   parent.postMessage({ pluginMessage: { type: 'import', data: processedData, skippedFiles } }, '*');
 }
 
@@ -482,50 +579,6 @@ let smartRawFiles: File[] = [];
 let smartCompData: Array<{ width: number; height: number; data: Uint8ClampedArray; thumbDataUrl: string } | null> = [];
 let smartThumbnails: string[] = [];
 let smartSections: Array<{ name: string; suggestedName: string; groups: Array<{ screens: number[]; isScrollGroup: boolean }> }> = [];
-
-const smartDropZone = document.getElementById('smartDropZone')!;
-const smartFileInput = document.getElementById('smartFileInput')! as HTMLInputElement;
-const smartSkippedNotice = document.getElementById('smartSkippedNotice')!;
-const smartAnalysisSection = document.getElementById('smartAnalysisSection')!;
-const analysisProgressFill = document.getElementById('analysisProgressFill')!;
-const analysisProgressText = document.getElementById('analysisProgressText')!;
-const smartPreviewSection = document.getElementById('smartPreviewSection')!;
-const analysisInfo = document.getElementById('analysisInfo')!;
-const smartPreview = document.getElementById('smartPreview')!;
-const smartStatsEl = document.getElementById('smartStats')!;
-const smartImportBtn = document.getElementById('smartImportBtn')!;
-const cancelSmartBtn = document.getElementById('cancelSmartBtn')!;
-const smartProgressEl = document.getElementById('smartProgress')!;
-const smartProgressFill = document.getElementById('smartProgressFill')!;
-const smartProgressText = document.getElementById('smartProgressText')!;
-
-smartDropZone.addEventListener('click', (e) => { e.stopPropagation(); smartFileInput.click(); });
-smartDropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); smartFileInput.click(); } });
-smartDropZone.addEventListener('dragover', (e) => { e.preventDefault(); smartDropZone.classList.add('drag-over'); });
-smartDropZone.addEventListener('dragleave', () => { smartDropZone.classList.remove('drag-over'); });
-smartDropZone.addEventListener('drop', (e) => {
-  e.preventDefault(); smartDropZone.classList.remove('drag-over');
-  if (e.dataTransfer!.files.length > 0) handleSmartFiles(e.dataTransfer!.files);
-});
-smartFileInput.addEventListener('change', (e) => handleSmartFiles((e.target as HTMLInputElement).files!));
-smartImportBtn.addEventListener('click', startSmartImport);
-
-function handleSmartFiles(files: FileList) {
-  const allFiles = Array.from(files);
-  const imageFiles = allFiles.filter(f => {
-    const name = f.name.toLowerCase();
-    return !name.startsWith('.') && (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg'));
-  });
-  const skipped = allFiles.length - imageFiles.length;
-  smartSkippedNotice.innerHTML = skipped > 0
-    ? `<div class="skipped-notice">${escapeHtml(t('skippedFiles', { count: skipped }))}</div>` : '';
-  if (imageFiles.length === 0) { alert(t('noImageFiles')); return; }
-  smartRawFiles = imageFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
-  if (smartRawFiles.length > MAX_FILES_WARNING) {
-    if (!confirm(t('largeFileWarning', { count: smartRawFiles.length }))) return;
-  }
-  analyzeScreenshots();
-}
 
 function loadImageData(file: File) {
   return new Promise<{ width: number; height: number; data: Uint8ClampedArray; thumbDataUrl: string }>((resolve, reject) => {
@@ -551,7 +604,6 @@ function loadImageData(file: File) {
 }
 
 function stripHasEnoughDetail(data: Uint8ClampedArray, w: number, startY: number, h: number): boolean {
-  // Compute per-channel variance across the strip; if too low, it's ~solid color
   let sumR = 0, sumG = 0, sumB = 0, n = 0;
   for (let row = 0; row < h; row += 2) {
     for (let col = 0; col < w; col += 2) {
@@ -568,7 +620,6 @@ function stripHasEnoughDetail(data: Uint8ClampedArray, w: number, startY: number
     }
   }
   const variance = varSum / (n * 3);
-  // Threshold: if variance < 80, strip is nearly solid → unreliable for matching
   return variance >= 80;
 }
 
@@ -581,7 +632,6 @@ function isScrollContinuation(compA: { width: number; height: number; data: Uint
   if (stripH < 5) return false;
   const stripStartA = Math.max(0, hA - navBarH - stripH);
 
-  // Guard: if the strip is nearly solid color, skip — matching would be unreliable
   if (!stripHasEnoughDetail(compA.data, w, stripStartA, stripH)) return false;
 
   const searchEnd = Math.min(hB, Math.floor(hB * 0.65));
@@ -633,10 +683,10 @@ function isSectionBreak(compA: { width: number; height: number; data: Uint8Clamp
 }
 
 async function analyzeScreenshots() {
-  smartAnalysisSection.style.display = 'block';
-  smartPreviewSection.style.display = 'none';
-  smartImportBtn.setAttribute('disabled', '');
-  (smartAnalysisSection.querySelector('.progress') as HTMLElement).style.display = 'block';
+  previewSection.style.display = 'none';
+  analysisSection.style.display = 'block';
+  importBtn.setAttribute('disabled', '');
+  (analysisSection.querySelector('.progress') as HTMLElement).style.display = 'block';
   (document.getElementById('cancelAnalysisBtn') as HTMLButtonElement).disabled = false;
   resetCancel('analysis');
   const scrollSens = parseFloat((document.getElementById('scrollSensitivity') as HTMLInputElement).value);
@@ -649,7 +699,7 @@ async function analyzeScreenshots() {
     analysisProgressText.textContent = t('loadingImage', { n: i + 1, total: smartRawFiles.length });
     const pct = ((i + 1) / smartRawFiles.length) * 50;
     analysisProgressFill.style.width = `${pct}%`;
-  smartAnalysisSection.querySelector('[role=progressbar]')?.setAttribute('aria-valuenow', String(Math.round(pct)));
+    analysisSection.querySelector('[role=progressbar]')?.setAttribute('aria-valuenow', String(Math.round(pct)));
     try {
       const data = await loadImageData(smartRawFiles[i]);
       smartCompData.push(data); smartThumbnails.push(data.thumbDataUrl);
@@ -661,7 +711,7 @@ async function analyzeScreenshots() {
   for (let i = 0; i < smartCompData.length; i++) { if (smartCompData[i] !== null) validIndices.push(i); }
   if (validIndices.length === 0) {
     analysisProgressText.textContent = t('noValidImages');
-    setTimeout(() => { smartAnalysisSection.style.display = 'none'; }, 2000);
+    setTimeout(() => { analysisSection.style.display = 'none'; }, 2000);
     return;
   }
 
@@ -711,39 +761,17 @@ async function analyzeScreenshots() {
     smartSections.push({ name: '', suggestedName: suggested || `Section ${s + 1}`, groups: sectionGroups });
   }
 
-  analysisProgressFill.style.width = '95%';
-  analysisProgressText.textContent = t('analysisComplete');
-
-  // Try AI-based section name suggestions if API key is available
-  if (getGeminiApiKey()) {
-    analysisProgressText.textContent = t('aiSuggesting');
-    try {
-      const aiLabels = await suggestSectionNamesWithAI(smartSections, smartThumbnails);
-      let applied = 0;
-      for (let i = 0; i < Math.min(aiLabels.length, smartSections.length); i++) {
-        if (aiLabels[i]) { smartSections[i].suggestedName = aiLabels[i]; applied++; }
-      }
-      if (applied > 0) {
-        analysisProgressText.textContent = t('aiSuggestDone', { count: applied });
-      }
-    } catch (e) {
-      console.warn('AI section suggestion failed:', e);
-      analysisProgressText.textContent = t('aiSuggestError');
-    }
-  }
-
   analysisProgressFill.style.width = '100%';
+  analysisProgressText.textContent = t('analysisComplete');
   setTimeout(() => {
-    smartAnalysisSection.style.display = 'none';
-    renderSmartPreview(loadErrors);
-    smartPreviewSection.style.display = 'block';
-    smartImportBtn.removeAttribute('disabled');
+    analysisSection.style.display = 'none';
+    showSmartPreview(loadErrors);
   }, 500);
 }
 
 function finishCancelledAnalysis() {
-  (smartAnalysisSection.querySelector('.progress') as HTMLElement).style.display = 'none';
-  smartAnalysisSection.style.display = 'none';
+  (analysisSection.querySelector('.progress') as HTMLElement).style.display = 'none';
+  analysisSection.style.display = 'none';
   analysisProgressFill.style.width = '0%';
 }
 
@@ -779,7 +807,6 @@ function suggestSectionName(section: { groups: Array<{ screens: number[] }> }, u
   }));
   if (filenames.length === 0) return '';
 
-  // Score each keyword category by how many filenames match
   const scores: Array<{ label: string; score: number }> = [];
   for (const cat of SECTION_KEYWORDS) {
     let score = 0;
@@ -792,12 +819,10 @@ function suggestSectionName(section: { groups: Array<{ screens: number[] }> }, u
   }
   scores.sort((a, b) => b.score - a.score);
 
-  // Pick the top match that hasn't been used yet
   for (const s of scores) {
     if (!usedNames.has(s.label)) return s.label;
   }
 
-  // Fallback: try to find a common non-numeric word across filenames
   const wordCounts = new Map<string, number>();
   const stopWords = new Set(['img', 'image', 'screenshot', 'screen', 'photo', 'pic', 'capture', 'shot', 'iphone', 'android', 'pixel', 'samsung', 'simulator', 'png', 'jpg', 'jpeg', 'at', 'am', 'pm']);
   for (const fn of filenames) {
@@ -807,7 +832,6 @@ function suggestSectionName(section: { groups: Array<{ screens: number[] }> }, u
       if (!seen.has(w)) { wordCounts.set(w, (wordCounts.get(w) || 0) + 1); seen.add(w); }
     }
   }
-  // Find the word that appears in the most filenames (at least 2)
   let bestWord = '', bestCount = 1;
   for (const [word, count] of wordCounts) {
     if (count > bestCount && !usedNames.has(capitalize(word))) { bestWord = word; bestCount = count; }
@@ -821,6 +845,14 @@ function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function showSmartPreview(loadErrors: number) {
+  previewSection.style.display = 'block';
+  folderPreviewWrap.style.display = 'none';
+  smartPreviewWrap.style.display = 'block';
+  renderSmartPreview(loadErrors);
+  importBtn.removeAttribute('disabled');
+}
+
 function renderSmartPreview(loadErrors: number) {
   let totalScreens = 0, scrollGroupCount = 0;
   let html = '';
@@ -829,12 +861,12 @@ function renderSmartPreview(loadErrors: number) {
     section.groups.forEach(g => { sectionScreenCount += g.screens.length; if (g.isScrollGroup) scrollGroupCount++; });
     totalScreens += sectionScreenCount;
     const screenWord = sectionScreenCount > 1 ? t('screens') : t('screen');
+    const displayName = section.name || section.suggestedName;
     html += `<div class="smart-section">`;
     html += `<div class="smart-section-header">`;
     html += `<span class="section-badge">Section</span>`;
     html += `<div class="section-name-wrapper">`;
-    html += `<input type="text" class="section-name-input" value="${escapeHtml(section.name)}" placeholder="${escapeHtml(section.suggestedName)}" data-section-idx="${sIdx}" onchange="updateSectionName(${sIdx}, this.value)" onfocus="showAcceptHint(this)" onblur="hideAcceptHint(this)" onkeydown="handleSectionNameKey(event, ${sIdx})" aria-label="Section name">`;
-    html += `<span class="section-accept-hint" aria-hidden="true">Tab ↵</span>`;
+    html += `<input type="text" class="section-name-input" value="${escapeHtml(displayName)}" placeholder="${escapeHtml(t('sectionNamePlaceholder'))}" data-section-idx="${sIdx}" onchange="updateSectionName(${sIdx}, this.value)" aria-label="Section name">`;
     html += `</div>`;
     html += `<span class="smart-section-count">${sectionScreenCount} ${escapeHtml(screenWord)}</span>`;
     html += `</div>`;
@@ -851,44 +883,21 @@ function renderSmartPreview(loadErrors: number) {
     });
     html += `</div></div>`;
   });
-  smartPreview.innerHTML = html;
+  smartPreviewEl.innerHTML = html;
   let infoHtml = t('detectedSummary', { sections: smartSections.length, scrollGroups: scrollGroupCount, total: smartRawFiles.length });
   if (loadErrors > 0) infoHtml += t('loadErrorsSuffix', { count: loadErrors });
   analysisInfo.innerHTML = infoHtml;
-  smartStatsEl.innerHTML = t('statsSummary', { sections: smartSections.length, scrollGroups: scrollGroupCount, screens: totalScreens });
+  statsEl.innerHTML = t('statsSummary', { sections: smartSections.length, scrollGroups: scrollGroupCount, screens: totalScreens });
 }
 
 function updateSectionName(idx: number, name: string) {
   if (idx >= 0 && idx < smartSections.length) smartSections[idx].name = name;
 }
 
-function handleSectionNameKey(e: KeyboardEvent, idx: number) {
-  const input = e.target as HTMLInputElement;
-  if ((e.key === 'Tab' || e.key === 'Enter') && !input.value && input.placeholder) {
-    e.preventDefault();
-    input.value = input.placeholder;
-    updateSectionName(idx, input.placeholder);
-    hideAcceptHint(input);
-    input.blur();
-  }
-}
-
-function showAcceptHint(input: HTMLInputElement) {
-  if (!input.value && input.placeholder) {
-    const hint = input.parentElement?.querySelector('.section-accept-hint') as HTMLElement;
-    if (hint) hint.style.opacity = '1';
-  }
-}
-
-function hideAcceptHint(input: HTMLInputElement) {
-  const hint = input.parentElement?.querySelector('.section-accept-hint') as HTMLElement;
-  if (hint) hint.style.opacity = '0';
-}
-
 async function startSmartImport() {
-  smartImportBtn.setAttribute('disabled', '');
-  cancelSmartBtn.style.display = 'block';
-  smartProgressEl.style.display = 'block';
+  importBtn.setAttribute('disabled', '');
+  cancelImportBtn.style.display = 'block';
+  importProgress.style.display = 'block';
   resetCancel('smart');
   const processedSections: Array<{ name: string; groups: Array<{ screens: Array<{ name: string; chunks: unknown; displayWidth: number; displayHeight: number }>; isScrollGroup: boolean }> }> = [];
   let totalScreens = 0, skippedFiles = 0;
@@ -902,29 +911,29 @@ async function startSmartImport() {
       const processedScreens: Array<{ name: string; chunks: unknown; displayWidth: number; displayHeight: number }> = [];
       for (const screenIdx of group.screens) {
         if (cancelFlags.smart) break;
-        smartProgressText.textContent = t('processingFile', { name: smartRawFiles[screenIdx].name });
+        importProgressText.textContent = t('processingFile', { name: smartRawFiles[screenIdx].name });
         try {
           const result = await processImage(smartRawFiles[screenIdx]);
           processedScreens.push({ name: smartRawFiles[screenIdx].name, chunks: result.chunks, displayWidth: result.displayWidth, displayHeight: result.displayHeight });
         } catch (e) { console.warn('Skipping failed image:', smartRawFiles[screenIdx].name, e); skippedFiles++; }
         processedCount++;
         const pct = (processedCount / totalScreens) * 100;
-        smartProgressFill.style.width = `${pct}%`;
-        smartProgressEl.setAttribute('aria-valuenow', String(Math.round(pct)));
+        importProgressFill.style.width = `${pct}%`;
+        importProgress.setAttribute('aria-valuenow', String(Math.round(pct)));
       }
       processedGroups.push({ screens: processedScreens, isScrollGroup: group.isScrollGroup });
     }
     const sectionName = section.name || section.suggestedName || `Section ${smartSections.indexOf(section) + 1}`;
     processedSections.push({ name: sectionName, groups: processedGroups });
   }
-  cancelSmartBtn.style.display = 'none';
+  cancelImportBtn.style.display = 'none';
   if (cancelFlags.smart) {
-    smartProgressText.textContent = t('importCancelled');
-    smartProgressFill.style.width = '0%';
-    setTimeout(() => { smartProgressEl.style.display = 'none'; smartImportBtn.removeAttribute('disabled'); }, 1500);
+    importProgressText.textContent = t('importCancelled');
+    importProgressFill.style.width = '0%';
+    setTimeout(() => { importProgress.style.display = 'none'; importBtn.removeAttribute('disabled'); }, 1500);
     return;
   }
-  smartProgressText.textContent = t('sendingToFigma');
+  importProgressText.textContent = t('sendingToFigma');
   parent.postMessage({
     pluginMessage: {
       type: 'smart-import',
@@ -935,38 +944,33 @@ async function startSmartImport() {
 }
 
 // ================================================================
-// Shared: Message Handling from Figma
+// Message Handling from Figma
 // ================================================================
 
 window.onmessage = (event: MessageEvent) => {
   const msg = event.data.pluginMessage;
   if (!msg) return;
-  const pFill = currentMode === 'smart' ? smartProgressFill : progressFill;
-  const pText = currentMode === 'smart' ? smartProgressText : progressText;
-  const pEl = currentMode === 'smart' ? smartProgressEl : progressEl;
-  const btn = currentMode === 'smart' ? smartImportBtn : importBtn;
   if (msg.type === 'progress') {
-    pText.textContent = msg.text;
-    if (msg.percent !== undefined) pFill.style.width = `${msg.percent}%`;
+    importProgressText.textContent = msg.text;
+    if (msg.percent !== undefined) importProgressFill.style.width = `${msg.percent}%`;
   } else if (msg.type === 'complete') {
-    pText.textContent = t('importComplete');
-    pFill.style.width = '100%';
-    setTimeout(() => { pEl.style.display = 'none'; btn.removeAttribute('disabled'); }, 2000);
+    importProgressText.textContent = t('importComplete');
+    importProgressFill.style.width = '100%';
+    setTimeout(() => { importProgress.style.display = 'none'; importBtn.removeAttribute('disabled'); }, 2000);
   } else if (msg.type === 'error') {
-    pText.textContent = `Error: ${msg.text}`;
-    btn.removeAttribute('disabled');
+    importProgressText.textContent = `Error: ${msg.text}`;
+    importBtn.removeAttribute('disabled');
   }
 };
 
+// ================================================================
 // Expose global functions for inline HTML handlers
-(window as any).switchMode = switchMode;
+// ================================================================
+function cancelCurrentImport() { cancelImport(currentImportMode); }
+
 (window as any).cancelImport = cancelImport;
+(window as any).cancelCurrentImport = cancelCurrentImport;
 (window as any).reAnalyze = reAnalyze;
-(window as any).toggleLang = toggleLang;
 (window as any).setLang = setLang;
 (window as any).updateSectionName = updateSectionName;
-(window as any).handleSectionNameKey = handleSectionNameKey;
-(window as any).showAcceptHint = showAcceptHint;
-(window as any).hideAcceptHint = hideAcceptHint;
-(window as any).saveGeminiApiKey = saveGeminiApiKey;
-(window as any).toggleApiKeyVisibility = toggleApiKeyVisibility;
+(window as any).clearAllFiles = clearAllFiles;
