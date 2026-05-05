@@ -11,6 +11,8 @@ const TEXTS = {
     previewTitle: 'Preview',
     settingsTitle: 'Settings',
     imageWidth: 'Image Width (px)',
+    useOriginalWidth: 'Use original image width',
+    useOriginalWidthHint: 'Ignore Image Width — keep each image at its natural pixel width (for responsive screenshots)',
     maxChunkHeight: 'Max Chunk Height (px)',
     scrollSens: 'Scroll Sensitivity',
     sectionSens: 'Section Sensitivity',
@@ -58,6 +60,8 @@ const TEXTS = {
     previewTitle: 'プレビュー',
     settingsTitle: '設定',
     imageWidth: '画像の幅 (px)',
+    useOriginalWidth: '元の画像の幅を保持',
+    useOriginalWidthHint: '画像の幅を無視し、各画像を元の幅のままインポート（レスポンシブ用）',
     maxChunkHeight: '最大チャンク高さ (px)',
     scrollSens: 'スクロール感度',
     sectionSens: 'セクション感度',
@@ -182,6 +186,11 @@ function getMaxChunkHeight() {
   return parseInt((document.getElementById('maxChunkHeight') as HTMLInputElement).value) || 4096;
 }
 
+function getUseOriginalWidth(): boolean {
+  const el = document.getElementById('useOriginalWidth') as HTMLInputElement | null;
+  return !!el && el.checked;
+}
+
 async function processImage(file: File) {
   return new Promise<{ chunks: Array<{ originalWidth: number; originalHeight: number; displayWidth: number; displayHeight: number; data: string }>; displayWidth: number; displayHeight: number }>((resolve, reject) => {
     const img = new Image();
@@ -189,10 +198,11 @@ async function processImage(file: File) {
     img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error(`Failed to load image: ${file.name}`)); };
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
-      const displayWidth = getImageWidth();
-      const maxChunkSize = getMaxChunkHeight();
+      const useOriginal = getUseOriginalWidth();
       const originalWidth = img.width;
       const originalHeight = img.height;
+      const displayWidth = useOriginal ? originalWidth : getImageWidth();
+      const maxChunkSize = getMaxChunkHeight();
       const displayScale = displayWidth / originalWidth;
       const displayHeight = Math.round(originalHeight * displayScale);
       const chunks: Array<{ originalWidth: number; originalHeight: number; displayWidth: number; displayHeight: number; data: string }> = [];
@@ -307,6 +317,15 @@ dropZone.addEventListener('drop', (e) => {
 folderInput.addEventListener('change', (e) => handleFolderSelected((e.target as HTMLInputElement).files!));
 fileInput.addEventListener('change', (e) => handleDroppedFiles(Array.from((e.target as HTMLInputElement).files!)));
 importBtn.addEventListener('click', startImport);
+
+(() => {
+  const cb = document.getElementById('useOriginalWidth') as HTMLInputElement | null;
+  const widthInput = document.getElementById('imageWidth') as HTMLInputElement | null;
+  if (!cb || !widthInput) return;
+  const sync = () => { widthInput.disabled = cb.checked; widthInput.style.opacity = cb.checked ? '0.5' : '1'; };
+  cb.addEventListener('change', sync);
+  sync();
+})();
 
 // ================================================================
 // Input Routing — Multi-folder accumulation with auto-detect
