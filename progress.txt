@@ -7,7 +7,8 @@
 - [x] 既存の `sync()` 初期化により Image Width 入力は起動時から自動グレーアウト
 - [x] `npm run build` で ui.html 再生成・反映確認
 - [x] ローカル版で動作確認済み（2026-07-17、デフォルトONを確認）
-- [x] FIGMA_COMMUNITY.md にリリースノート（EN/JA）追記 → Community版の公開更新待ち
+- [x] FIGMA_COMMUNITY.md にリリースノート（EN/JA）追記
+- [x] Figma Community版に公開更新済み（2026-07-17）
 
 ## v4.0.0 (2026-03-19) - ミニマル化: AI 機能削除
 
