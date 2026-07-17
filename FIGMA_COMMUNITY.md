@@ -35,6 +35,16 @@ Features:
 • キャンセル機能
 • 画像幅・検出感度の調整
 
+## Release Notes
+
+### 2026-07-17 — "Use original image width" enabled by default
+
+**EN:**
+"Use original image width" is now enabled by default. Imported screenshots keep their natural pixel width out of the box — ideal for responsive screenshots. Uncheck it in Settings to resize all images to a fixed width as before.
+
+**JA:**
+「元の画像の幅を保持」がデフォルトでONになりました。インポートしたスクリーンショットは初期状態で元のピクセル幅のまま配置されます（レスポンシブなスクリーンショットに最適）。従来どおり固定幅に揃えたい場合は、設定でチェックを外してください。
+
 ## Data Security Answers (Step 3)
 
 | Question | Answer |
